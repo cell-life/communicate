@@ -1,0 +1,1 @@
+insert into numberinfo (id, name, prefix, validator, voided, channel_id) values (1,'South Africa','27','^27[78]{1}[0-9]{8}$',0,3)

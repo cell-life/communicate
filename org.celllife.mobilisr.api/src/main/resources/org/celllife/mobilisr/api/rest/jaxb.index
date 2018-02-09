@@ -1,0 +1,6 @@
+CampaignDto
+ContactDto
+MessageDto
+MessageStatusDto
+PagedListDto
+ErrorDto

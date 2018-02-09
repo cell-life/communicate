@@ -1,0 +1,2 @@
+serviceClass: org.celllife.mobilisr.service.gwt.AdminService
+path: 0A015E30BC836CBF9EA39CEF83406F63.gwt.rpc

@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="campaign_subscruber_report" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	
+	<template><![CDATA[$P{SUBREPORT_DIR} + "report_style_template.jrtx"]]></template>
+	
+	<subDataset name="unique_users_dataset">
+	    <parameter name="organization" class="java.lang.String"/>
+	    <parameter name="campaign_name" class="java.lang.String"/>
+	    <parameter name="end_date" class="java.util.Date"/>
+	    <queryString><![CDATA[
+select count(distinct cc.msisdn) as 'unique_users'
+from campaigncontact cc, campaign c, organization o 
+where cc.campaign_id=c.id 
+    and c.org_id=o.id 
+	and o.name like $P{organization}
+	and c.name like $P{campaign_name} 
+	and cc.joinedDate <= $P{end_date}
+	and c.type in ('FLEXI','DAILY');
+		]]></queryString>
+	    <field name="unique_users" class="java.lang.Number"/>
+	</subDataset>
+	
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cal" class="java.util.Calendar" isForPrompting="false">
+		<defaultValueExpression><![CDATA[Calendar.getInstance()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="start_date" class="java.util.Date">
+		<defaultValueExpression><![CDATA[(  $P{cal}.set(Calendar.DAY_OF_MONTH, $P{cal}.getActualMinimum(Calendar.DAY_OF_MONTH)) ) ? null : $P{cal}.getTime()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="end_date" class="java.util.Date">
+		<defaultValueExpression><![CDATA[(  $P{cal}.set(Calendar.DAY_OF_MONTH, $P{cal}.getActualMaximum(Calendar.DAY_OF_MONTH)) ) ? null : $P{cal}.getTime()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="organization" class="java.lang.String"/>
+	<parameter name="campaign_name" class="java.lang.String"/>
+	
+	<queryString>
+		<![CDATA[
+select o.name as 'organization_name', c.name as 'campaign_name', oi.opt_ins as 'opt_ins', ou.opt_outs as 'opt_outs', 
+ td.total_to_date as 'total_to_date'
+from campaign c
+ left join organization o on (o.id = c.org_id)
+ left join
+  (select oicc.campaign_id, count(*) as 'opt_ins' from campaigncontact oicc 
+  where oicc.joinedDate between $P{start_date} and $P{end_date} 
+  group by oicc.campaign_id)
+  as oi on (oi.campaign_id = c.id)
+ left join
+  (select oucc.campaign_id, count(*) as 'opt_outs' from campaigncontact oucc 
+  where oucc.endDate between $P{start_date} and $P{end_date} 
+  group by oucc.campaign_id)
+  as ou on (ou.campaign_id = c.id)
+ left join
+  (select tdcc.campaign_id, count(*) as 'total_to_date' from campaigncontact tdcc 
+  where tdcc.joinedDate <= $P{end_date}
+  group by tdcc.campaign_id)
+  as td on (td.campaign_id = c.id)
+where c.type in ('FLEXI','DAILY')
+	and o.name like $P{organization} and c.name like $P{campaign_name}    
+group by c.name
+order by c.name;
+		]]>
+	</queryString>
+	<field name="organization_name" class="java.lang.String"/>
+	<field name="campaign_name" class="java.lang.String"/>
+	<field name="opt_ins" class="java.lang.Number"/>
+	<field name="opt_outs" class="java.lang.Number"/>
+	<field name="total_to_date" class="java.lang.Number"/>
+	
+	<variable name="sum_optins" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{opt_ins}]]></variableExpression>
+	</variable>
+	<variable name="sum_optouts" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{opt_outs}]]></variableExpression>
+	</variable>
+	<variable name="sum_totaltodate" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_to_date}]]></variableExpression>
+	</variable>
+	
+	<title>
+		<band height="136" splitType="Stretch">
+			<staticText>
+				<reportElement style="report_title" mode="Transparent" x="1" y="1" width="476" height="46"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Campaign Subscriber Report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="56" width="90" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Organisation:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="92" y="56" width="210" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{organization}.equals( "%" )? "All Organisations":$P{organization}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="72" width="90" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Campaign:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="92" y="72" width="210" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{campaign_name}.equals( "%" )? "All Campaigns":$P{campaign_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="88" width="90" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporting Period:]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="92" y="88" width="97" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{start_date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="189" y="88" width="17" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[to]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="206" y="88" width="97" height="15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{end_date}]]></textFieldExpression>
+			</textField>
+			
+			<componentElement>
+			    <reportElement x="0" y="120" width="400" height="16"/>
+			    <jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+			        <datasetRun subDataset="unique_users_dataset">
+			            <datasetParameter name="organization"><datasetParameterExpression><![CDATA[$P{organization}]]></datasetParameterExpression></datasetParameter>
+			            <datasetParameter name="campaign_name"><datasetParameterExpression><![CDATA[$P{campaign_name}]]></datasetParameterExpression></datasetParameter>
+			            <datasetParameter name="end_date"><datasetParameterExpression><![CDATA[$P{end_date}]]></datasetParameterExpression></datasetParameter>
+			        </datasetRun>
+			        <jr:listContents height="40">
+						<staticText>
+							<reportElement x="1" y="0" width="90" height="15"/>
+							<textElement verticalAlignment="Middle">
+								<font isBold="true"/>
+							</textElement>
+							<text><![CDATA[Unique:]]></text>
+						</staticText>
+			            <textField>
+			                <reportElement x="92" y="0" width="210" height="15"/>
+			                <textElement/>
+			                <textFieldExpression class="java.lang.String"><![CDATA[$F{unique_users}]]></textFieldExpression>
+			            </textField>
+			        </jr:listContents>
+			    </jr:list>
+			</componentElement>
+			
+			<image>
+				<reportElement x="495" y="0" width="60" height="60"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "communicate_c.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="45">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+			<textField>
+				<reportElement x="0" y="20" width="554" height="20">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page " + String.valueOf($V{PAGE_NUMBER}) + " of " + String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="nth_page_title" x="0" y="0" width="554" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Campaign Subscriber Report]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement style="column_header" mode="Opaque" x="0" y="0" width="105" height="40"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Organisation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column_header" mode="Opaque" x="105" y="0" width="205" height="40"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Campaign]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column_header" mode="Opaque" x="310" y="0" width="80" height="40"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Opt-ins]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column_header" mode="Opaque" x="390" y="0" width="80" height="40"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Opt-outs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column_header" mode="Opaque" x="470" y="0" width="80" height="40"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Total sign-ups]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="105" height="20"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{organization_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="105" y="0" width="205" height="20"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{campaign_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="310" y="0" width="80" height="20"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{opt_ins}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="390" y="0" width="80" height="20"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$F{opt_outs}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="470" y="0" width="80" height="20"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$F{total_to_date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="40" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="128" height="40"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "cell-life.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="322" y="0" width="114" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Report generated on:]]></text>
+			</staticText>
+			<textField pattern="EEE, d MMM yyyy HH:mm">
+				<reportElement x="436" y="0" width="119" height="20"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-5" x="399" y="20" width="80" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page " + String.valueOf($V{PAGE_NUMBER}) + " of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="480" y="20" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="15">
+			<staticText>
+				<reportElement style="column_header" mode="Opaque" x="0" y="0" width="310" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTALS]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true" pattern="###0">
+				<reportElement style="column_header" mode="Opaque" x="310" y="0" width="80" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$V{sum_optins}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" pattern="###0">
+				<reportElement style="column_header" mode="Opaque" x="390" y="0" width="80" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$V{sum_optouts}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" pattern="###0">
+				<reportElement style="column_header" mode="Opaque" x="470" y="0" width="80" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$V{sum_totaltodate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

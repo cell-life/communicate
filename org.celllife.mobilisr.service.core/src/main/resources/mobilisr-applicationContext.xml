@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" default-autowire="byType"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:annotation-config/>
+	<context:component-scan base-package="org.celllife.mobilisr"/>
+
+	<bean
+		class="org.celllife.mobilisr.util.MobilisrPropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:communicate.properties</value>
+				<value>file:///${COMMUNICATE_HOME}/communicate.properties</value>
+			</list>
+		</property>
+		<!--<property name="location" value="classpath:communicate.properties" />
+		<property name="location"
+			value="file:///${COMMUNICATE_HOME}/communicate.properties" />
+		--><property name="prefix" value="live" />
+	</bean>
+
+	<bean id="slf4jLogger" class="org.celllife.mobilisr.logger.Slf4jLogger">
+		<qualifier value="aspectLogger" />
+	</bean>
+	
+	<import resource="mobilisr-domainContext.xml" />
+	<import resource="mobilisr-batchContext.xml" />	
+	<import resource="mobilisr-securityContext.xml" />
+	<import resource="mobilisr-serviceContext.xml" />
+	<import resource="mobilisr-integrationContext.xml" />
+	<import resource="mobilisr-jmxContext.xml" />
+
+</beans>

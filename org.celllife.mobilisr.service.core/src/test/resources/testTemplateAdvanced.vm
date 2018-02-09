@@ -1,0 +1,7 @@
+#**
+This is the template for testing
+
+Variables that may be used are:
+ - dateVar
+*#
+$date.format('medium',$dateVar)

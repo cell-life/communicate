@@ -1,0 +1,2 @@
+serviceClass: org.celllife.mobilisr.service.gwt.RoleService
+path: 552BBDB83D17AA3850BABA0E4B1F7771.gwt.rpc

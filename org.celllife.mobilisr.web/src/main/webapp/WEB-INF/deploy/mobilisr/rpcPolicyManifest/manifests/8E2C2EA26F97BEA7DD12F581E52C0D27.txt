@@ -1,0 +1,2 @@
+serviceClass: org.celllife.mobilisr.service.gwt.ChannelService
+path: AB98C84502EB5DC09FF7F4E182EF6DF8.gwt.rpc

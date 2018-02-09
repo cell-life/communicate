@@ -1,0 +1,2 @@
+serviceClass: org.celllife.mobilisr.service.gwt.SettingService
+path: 26949947A78A2C32969B9568B2FFE121.gwt.rpc

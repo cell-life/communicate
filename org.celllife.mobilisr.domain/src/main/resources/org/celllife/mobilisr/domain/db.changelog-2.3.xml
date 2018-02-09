@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+	<changeSet author="simon@cell-life.org" id="2.3.1">
+		<comment>remove unique constraint on channel.shortcode</comment>
+		<dropUniqueConstraint tableName="channel" uniqueColumns="shortcode"
+			constraintName="shortcode"/>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.2">
+		<comment>increase length of smslog.waspstatus column</comment>
+		<modifyColumn tableName="smslog">
+			<column name="waspstatus" type="VARCHAR(255)"/>
+		</modifyColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.3">
+		<comment>rename trigger tables</comment>
+		<renameTable newTableName="messagefilter" oldTableName="smstrigger" />
+		<renameTable newTableName="filteraction" oldTableName="smstriggerhandler" />
+		<dropForeignKeyConstraint baseTableName="filteraction"
+			constraintName="fk_smstriggerhandler_smstrigger" />
+		<renameColumn tableName="filteraction" oldColumnName="smstrigger_id"
+			newColumnName="filter_id" columnDataType="BIGINT"/>
+		<addForeignKeyConstraint constraintName="fk_filteraction_messagefilter"
+			referencedTableName="messagefilter" baseColumnNames="filter_id"
+			baseTableName="filteraction" referencedColumnNames="id" />
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.4">
+		<comment>add name and voided column to messagefilter</comment>
+		<addColumn tableName="messagefilter">
+			<column name="name" type="VARCHAR(100)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="voided" type="boolean" defaultValueBoolean="false">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.5">
+		<preConditions onFail="MARK_RAN">
+			<sqlCheck expectedResult="0">select count(*) from channel where
+				handler like '%telfree%'</sqlCheck>
+		</preConditions>
+		<comment>add Telfree channel handler</comment>
+		<insert tableName="channel">
+			<column name="handler" value="telfreeOutChannel"/>
+			<column name="name" value="Telfree outgoing"/>
+			<column name="status" value="INACTIVE"/>
+			<column name="type" value="OUT"/>
+		</insert>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.6">
+		<comment>change channel names and handlers</comment>
+		<update tableName="channel">
+			<column name="name" value="Integrat outgoing"/>
+			<column name="handler" value="integratOutChannel"/>
+			<where>handler like '%integrat%'</where>
+		</update>
+		<update tableName="channel">
+			<column name="name" value="Telfree outgoing"/>
+			<column name="handler" value="telfreeOutChannel"/>
+			<where>handler like '%telfree%'</where>
+		</update>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.7">
+		<comment>rename filteraction order column</comment>
+		<renameColumn tableName="filteraction" oldColumnName="order"
+			newColumnName="order_index" columnDataType="INT"/>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.8">
+		<comment>add type column to filteraction</comment>
+		<addColumn tableName="filteraction">
+			<column name="type" type="VARCHAR(100)">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.9">
+		<comment>add actionslabel column to messagefilter</comment>
+		<addColumn tableName="messagefilter">
+			<column name="actionslabel" type="VARCHAR(255)" />
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.10">
+		<comment>remove name column to filteraction</comment>
+		<dropColumn tableName="filteraction" columnName="name"/>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.11">
+		<comment>increase length of failreason column in smslog</comment>
+		<modifyColumn tableName="smslog">
+			<column name="failreason" type="VARCHAR(510)"/>
+		</modifyColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.12">
+		<comment>add TelfreeSmpp out channel</comment>
+		<insert tableName="channel">
+			<column name="handler" value="telfreeSmpp"/>
+			<column name="name" value="Telfree SMPP Out"/>
+			<column name="status" value="INACTIVE"/>
+			<column name="type" value="OUT"/>
+		</insert>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.13">
+		<comment>change clientalert to mailmessage table</comment>
+		<renameTable newTableName="mailmessage" oldTableName="clientalert"/>
+		<renameColumn tableName="mailmessage" oldColumnName="msg"
+			newColumnName="text" columnDataType="VARCHAR(1000)"/>
+		<addColumn tableName="mailmessage">
+			<column name="subject" type="VARCHAR(200)"/>
+		</addColumn>
+		<addColumn tableName="mailmessage">
+			<column name="address" type="VARCHAR(100)" defaultValue="">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+		<dropNotNullConstraint tableName="mailmessage" columnName="organization_id"
+			columnDataType="BIGINT"/>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.14">
+		<comment>add Email address to send system notifications to setting</comment>
+		<insert tableName="setting">
+			<column name="description"
+				value="Email address to send system notifications to" />
+			<column name="name" value="System notifications email address" />
+			<column name="type" value="EMAIL" />
+			<column name="valueString" value="" />
+		</insert>
+	</changeSet>
+	<changeSet author="dine@cell-life.org" id="2.3.15">
+		<comment>Add Contact Count to Campaign Table</comment>
+		<addColumn tableName="campaign">
+			<column name="contactcount" type="int" defaultValue="0">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+		<sql>
+		UPDATE campaign
+		SET contactcount = (SELECT COUNT(campaign_id) 
+		FROM campaigncontact WHERE campaign_id= campaign.id)
+		</sql>
+	</changeSet>
+		<changeSet author="dine@cell-life.org" id="2.3.16">
+		<comment>Add Message Count to Campaign Table</comment>
+		<addColumn tableName="campaign">
+			<column name="messagecount" type="int" defaultValue="0">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+		<sql>
+		UPDATE campaign
+		SET messagecount = (SELECT COUNT(campaign_id) 
+		FROM campaignmessage WHERE campaign_id= campaign.id)
+		</sql>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.17">
+		<comment>Change smslog status names</comment>
+		<update tableName="smslog">
+			<column name="status" value="WASP_SUCCESS"/>
+			<where>status = 'WASP_SENT'</where>
+		</update>
+		<update tableName="smslog">
+			<column name="status" value="QUEUED_SUCCESS"/>
+			<where>status = 'QUEUED'</where>
+		</update>
+	</changeSet>
+	<changeSet author="dave@cell-life.org" id="2.3.18">
+		<comment>add Email address to send credit added notifications to setting.</comment>
+		<insert tableName="setting">
+			<column name="description"
+				value="Email address to send credit added notifications to" />
+			<column name="name" value="Credit added email address" />
+			<column name="type" value="EMAIL" />
+			<column name="valueString" value="" />
+		</insert>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.19">
+		<comment>delete filterActionJobRunner quartz job</comment>
+		<delete tableName="QRTZ_JOB_DETAILS">
+			<where>JOB_NAME = 'filterActionJobRunner'</where>
+		</delete>
+	</changeSet>
+		<changeSet author="dine@cell-life.org" id="2.3.20">
+		<comment>Add number of days before message expires.</comment>
+		<insert tableName="setting">
+			<column name="description" value="The number of days before a message expires." />
+			<column name="name" value="Message Validity Time" />
+			<column name="type" value="POSITIVE_INTEGER" />
+			<column name="valueString" value="7" />
+		</insert>
+	</changeSet>
+	<changeSet author="dave@cell-life.org" id="2.3.21">
+		<comment>Add voided column to smslog.</comment>
+		<addColumn tableName="smslog">
+			<column name="voided" type="boolean" defaultValueBoolean="false">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.22">
+		<comment>add numberinfo table</comment>
+		<createTable tableName="numberinfo">
+			<column autoIncrement="true" name="id" type="BIGINT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="country" type="VARCHAR(100)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="country_code" type="VARCHAR(4)">
+				<constraints nullable="false" unique="true"/>
+			</column>
+			<column name="validator" type="VARCHAR(255)">
+				<constraints nullable="false" unique="true"/>
+			</column>
+			<column name="validation_message" type="VARCHAR(255)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="voided" type="boolean" defaultValueBoolean="false">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		<createIndex indexName="voided" tableName="numberinfo" unique="false">
+            <column name="voided"/>
+        </createIndex>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.23">
+		<comment>change settings to use pconfig</comment>
+		<dropColumn tableName="setting" columnName="type"/>
+		<dropColumn tableName="setting" columnName="description"/>
+		<delete tableName="setting"/>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.24">
+		<comment>add attachments column to mailmessage</comment>
+		<addColumn tableName="mailmessage">
+			<column name="attachments" type="VARCHAR(510)"/>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.25">
+		<comment>change table types to innodb</comment>
+		<sqlFile path="org/celllife/mobilisr/domain/2.3.25-change_table_types.sql"/>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.26">
+		<comment>change table collation to UTF-8</comment>
+		<sqlFile path="org/celllife/mobilisr/domain/2.3.26-change_table_collation.sql"/>
+		<!-- for some reason all TEXT colums got changed to MEDIUMTEXT
+			when the collation changed -->
+		<modifyColumn tableName="filteraction">
+			<column name="props" type="TEXT"/>
+		</modifyColumn>
+		<modifyColumn tableName="role">
+			<column name="perimssions" type="TEXT"/>
+		</modifyColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.27">
+		<comment>correct spelling of role.permissions column</comment>
+		<renameColumn tableName="role" oldColumnName="perimssions" 
+			newColumnName="permissions" columnDataType="TEXT"/>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.28">
+		<comment>remove validation message column from numberinfo</comment>
+		<dropColumn tableName="numberinfo" columnName="validation_message"/>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.29">
+		<comment>rename premission CREDIT_ORGANISATION_BALANCE</comment>
+		<sql><![CDATA[
+			update role set permissions = replace(permissions, 'ORGANIZATION', 'ORGANISATION')
+		]]></sql>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.30">
+		<comment>drop not null constraint on channel.hanlder</comment>
+		<dropNotNullConstraint tableName="channel" columnName="handler" 
+			columnDataType="VARCHAR(30)"/>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.31">
+		<comment>refactor channel status to voided</comment>
+		<addColumn tableName="channel">
+			<column name="voided" type="boolean" defaultValueBoolean="true">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+		<sql><![CDATA[
+			update channel set voided = false where status = 'ACTIVE'
+		]]></sql>
+		<dropColumn tableName="channel" columnName="status"/>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.3.32">
+		<comment>rename premission MANAGE_CAMPAIGNS</comment>
+		<sql><![CDATA[
+			update role set permissions = replace(permissions, 'MANAGE_CAMPAIGNS', 'CAMPAIGNS_ADMIN_MANAGE')
+		]]></sql>
+	</changeSet>
+</databaseChangeLog>

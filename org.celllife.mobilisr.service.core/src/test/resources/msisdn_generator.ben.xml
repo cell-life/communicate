@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<setup xmlns="http://databene.org/benerator/0.6.3"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://databene.org/benerator/0.6.3 http://databene.org/benerator-0.6.3.xsd">
+
+    <!-- data for org.celllife.mobilisr.service.integrationtest.CSVBatchImportIntegrationTests -->
+    <generate name="name-msisdn" count="1000">
+        <variable name="person" generator="org.databene.domain.person.PersonGenerator"/>
+        <attribute name="name" script="person.givenName + ' testCsvBatchSave'"/>
+        <attribute name="msisdn" pattern="27[1-9]{1}[0-9]{8}"/>
+        <consumer class="org.databene.platform.csv.CSVEntityExporter">
+            <!-- use dbUrl variable as basedir (passed from maven)-->
+            <property name="uri" value="{dbUrl + '/target/test-classes/name-msisdn-gen.csv'}"/>
+            <property name="encoding" value="UTF-8"/>
+            <property name="columns" value="name,msisdn"/>
+        </consumer>
+    </generate>
+</setup>

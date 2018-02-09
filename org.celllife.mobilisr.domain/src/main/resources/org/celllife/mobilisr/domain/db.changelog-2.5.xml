@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+	<changeSet author="simon@cell-life.org" id="2.5.1">
+		<comment>create channelconfig table</comment>
+		<createTable tableName="channelconfig">
+			<column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+			<column name="name" type="VARCHAR(100)">
+				<constraints nullable="false" unique="true"/>
+			</column>
+			<column name="handler" type="VARCHAR(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="properties" type="TEXT">
+				<constraints nullable="false"/>
+			</column>
+			<column name="voided" type="BOOLEAN"/>
+		</createTable>
+		<addColumn tableName="channel">
+			<column name="config_id" type="BIGINT"/>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.5.2">
+		<comment>move WASP setting from properties file to database</comment>
+		<customChange class="org.celllife.mobilisr.liquibase.MoveChannelSettingsToDatabase" />
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.5.3">
+		<comment>change channel handler names</comment>
+		<update tableName="channel">
+			<column name="handler" value="out-telfreeHttp"/>
+			<where>handler = 'telfreeOutChannel'</where>
+		</update>
+		<update tableName="channel">
+			<column name="handler" value="out-integratHttp"/>
+			<where>handler = 'integratOutChannel'</where>
+		</update>
+		<update tableName="channel">
+			<column name="handler" value="out-simulator"/>
+			<where>handler = 'simOutChannel'</where>
+		</update>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.5.4">
+		<comment>change channel handler names</comment>
+		<update tableName="channelconfig">
+			<column name="handler" value="out-telfreeHttp"/>
+			<where>handler = 'telfreeOutChannel'</where>
+		</update>
+		<update tableName="channelconfig">
+			<column name="handler" value="out-integratHttp"/>
+			<where>handler = 'integratOutChannel'</where>
+		</update>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.5.5">
+		<comment>Split up MANAGE_CHANNELS permission</comment>
+		<sql><![CDATA[
+			update role set permissions = replace(permissions, 
+			'MANAGE_CHANNELS', 'CHANNELS_IN_CREATE;CHANNELS_IN_EDIT;CHANNELS_IN_START_STOP');
+		]]></sql>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.5.6">
+		<comment>Split up MANAGE_FILTERS permission</comment>
+		<sql><![CDATA[
+			update role set permissions = replace(permissions, 
+			'MANAGE_FILTERS', 'FILTERS_ADMIN_CREATE;FILTERS_ADMIN_EDIT;FILTERS_ADMIN_START_STOP');
+		]]></sql>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.5.7">
+		<comment>rename messagefilter.inchannel_id to channel_id</comment>
+		<dropAllForeignKeyConstraints
+			baseTableName="messagefilter" />
+		<renameColumn tableName="messagefilter" oldColumnName="inchannel_id"
+			newColumnName="channel_id" columnDataType="BIGINT" />
+		<addForeignKeyConstraint constraintName="fk_messagefilter_channel"
+			referencedTableName="channel" baseColumnNames="channel_id"
+			baseTableName="messagefilter" referencedColumnNames="id" />
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.5.8">
+		<comment>add active column to messagefilter</comment>
+		<addColumn tableName="messagefilter">
+			<column name="active" type="BOOLEAN" defaultValueBoolean="false">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+		<sql><![CDATA[
+			update messagefilter set active = NOT voided;
+		]]></sql>
+		<update tableName="messagefilter">
+			<column name="voided" valueBoolean="false"></column>
+		</update>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.5.9">
+		<comment>add apikey table</comment>
+		<createTable tableName="apikey">
+			<column autoIncrement="true" name="id" type="BIGINT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="key" type="VARCHAR(100)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			<column name="user_id" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="voided" type="BOOLEAN" defaultValueBoolean="false" />
+		</createTable>
+		<addForeignKeyConstraint constraintName="fk_apikey_user"
+			baseTableName="apikey"
+			baseColumnNames="user_id" 
+			referencedTableName="user" 
+			referencedColumnNames="id" />
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.5.10">
+		<comment>change apikey.key to apikey.keyvalue</comment>
+		<renameColumn tableName="apikey" oldColumnName="key"
+			newColumnName="keyvalue" columnDataType="varchar(100)" />
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.5.11">
+		<comment>set loginsinceupgrade to false</comment>
+		<update tableName="user">
+			<column name="loginsinceupgrade" valueBoolean="false"/>
+		</update>
+	</changeSet>
+</databaseChangeLog>

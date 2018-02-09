@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:http="http://www.springframework.org/schema/integration/http"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:stream="http://www.springframework.org/schema/integration/stream"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" 
+	xmlns:jms="http://www.springframework.org/schema/integration/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/task 
+			http://www.springframework.org/schema/task/spring-task.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context.xsd
+			http://www.springframework.org/schema/integration
+			http://www.springframework.org/schema/integration/spring-integration.xsd
+			http://www.springframework.org/schema/integration/jms
+			http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd
+			http://www.springframework.org/schema/integration/stream
+			http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+			http://www.springframework.org/schema/integration/http 
+			http://www.springframework.org/schema/integration/http/spring-integration-http.xsd">
+
+<!-- 
+====================================================================================
+                         Delivery receipt flow
+====================================================================================
+
+                            ~~~~~~~~~~~                                 ~~~~~~~~~~~~~
+                            SMPP server                                 SmsController
+                            ~~~~~~~~~~~                                 ~~~~~~~~~~~~~
+                                 |                                            |
+                                 |                                            |<channel per handler>
+                                 |                                            |
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        MessageService.deliveryReceived(DeliveryReceipt receipt)    e.g. TelfreeHttpTransformer
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 |                                            |
+                                 |___________________________________________/
+                                 |                                            
+                                 |deliveryChannel                            
+                                 |
+                         ~~~~~~~~~~~~~~~~~
+                         DeliveryProcessor
+                         ~~~~~~~~~~~~~~~~~ 
+                         
+====================================================================================
+                         Incoming message flow
+====================================================================================
+
+                           ~~~~~~~~~~~~~                           ~~~~~~~~~~~
+                           SmsController                           SMPP Server
+                           ~~~~~~~~~~~~~                           ~~~~~~~~~~~
+                                 |                                      |
+                                 |                                      |
+                                 |                                      |
+                                 |<channel per handler>          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 |                               MessageService.messageReceived(SmsMo sms)
+                                 |                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
+                                 |                                      |
+             ____________________|                                      |
+            /                    |                                      |
+           /           ~~~~~~~~~~~~~~~~~~~~~~~~~~                       |
+other transformers     e.g. HttpGetApiTransformer                       |         
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~                      /
+                                 |____________________________________/
+                                 |
+                                 |incomingQueue -> incomingMessages
+                                 |
+                      ~~~~~~~~~~~~~~~~~~~~~~~~                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                      IncomingMessageProcessor                 MessageService.processMessage(SmsLog sms)
+                      ~~~~~~~~~~~~~~~~~~~~~~~~                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 |                                               |
+                                 |______________________________________________/
+                                 |
+                                 |messageProcessing
+                                 |
+                         ~~~~~~~~~~~~~~~~~~
+                         FilterActionRunner
+                         ~~~~~~~~~~~~~~~~~~
+-->
+
+	<!-- After delivery messages have been received from the WASP they
+		are placed on this channel -->
+	<channel id="deliveryChannel">
+		<dispatcher task-executor="messageInTaskExecutor"/>
+	</channel>
+	
+	<!-- After messages have been received from the WASP they
+		are placed on this channel -->
+	<channel id="incomingQueue">
+		<queue/>
+	</channel>
+	
+	<!-- This takes messages out of the incomingQueue and sends them to
+		the incominMessages channel -->
+	 <bridge input-channel="incomingQueue" output-channel="incomingMessages">
+     	<poller max-messages-per-poll="250" fixed-rate="1000"/>
+	 </bridge>
+	 
+ 	<!-- Messages on this channel will be save to the database and forwarded
+ 		to the messageProcessing channel -->
+	<channel id="incomingMessages"/>
+	
+	<!-- Messages on this channel will be filtered and processed -->
+	<channel id="messageProcessing">
+		<dispatcher task-executor="messageInTaskExecutor"/>
+	</channel>
+	
+	<!--
+		Raw messages received via HTTP are placed on these channels
+		for conversion to SmsMo messages before being sent to 
+		the incomingMessages channel.
+		see org.celllife.mobilisr.controller.SmsController
+		
+		Changes to these names must also be done
+		in the relevant channel handler
+		see org.celllife.mobilisr.service.wasp.ChannelHandler 
+		-->
+	<channel id="in-http" />
+	<channel id="in-integrat" />
+	<channel id="in-mira" />
+	<channel id="in-aat" />
+	<channel id="in-panceamobile" />
+	<channel id="in-telfree" />
+	<channel id="delivery-integrat" />
+	<channel id="delivery-telfree" />
+	
+	<beans:bean id="messageInTaskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<beans:property name="corePoolSize" value="10" />
+		<beans:property name="maxPoolSize" value="250" />
+		<beans:property name="keepAliveSeconds" value="60" />
+<!--		<beans:property name="queueCapacity" value="2000" />-->
+		<beans:property name="rejectedExecutionHandler">
+			<beans:bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy" />
+		</beans:property>
+	</beans:bean>
+	
+</beans:beans>

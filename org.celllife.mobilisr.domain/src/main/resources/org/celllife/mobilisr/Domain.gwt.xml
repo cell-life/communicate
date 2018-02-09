@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+	<inherits name='com.google.gwt.user.User' />
+	<inherits name="com.extjs.gxt.ui.GXT"/>
+	<source path='exception'/>
+	<source path='domain'/>
+	<source path='gwtmodel'/>
+<!--	<source path='utilbean/sms'/>-->
+	<inherits name="net.sf.gilead.Gilead4Gwt"/>
+	<inherits name="org.celllife.mobilisr.API"/>
+</module>

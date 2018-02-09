@@ -1,0 +1,2 @@
+serviceClass: org.celllife.mobilisr.service.gwt.ExportService
+path: 9C9AD8E29EFD8C3D2B05E3CF292A9702.gwt.rpc

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+	<changeSet author="simon@cell-life.org" id="2.2.1">
+		<comment>remove organisation balance threshold setting</comment>
+		<delete tableName="setting">
+			<where>name = 'Balance warning threshold'</where>
+		</delete>
+	</changeSet>
+	<changeSet author="munaf@cell-life.org" id="2.2.2">
+		<comment>Add Voided Column to User</comment>
+		<addColumn tableName="user">
+			<column name="voided" type="boolean" defaultValueBoolean="false"/>
+		</addColumn>
+	</changeSet>
+	<changeSet author="munaf@cell-life.org" id="2.2.3">
+		<comment>Add Voided Column to Organization</comment>
+		<addColumn tableName="organization">
+			<column name="voided" type="boolean" defaultValueBoolean="false"/>
+		</addColumn>
+	</changeSet>	
+	<changeSet author="munaf@cell-life.org" id="2.2.4">
+		<comment>Add Voided Column to Campaign</comment>
+		<addColumn tableName="campaign">
+			<column name="voided" type="boolean" defaultValueBoolean="false"/>
+		</addColumn>
+	</changeSet>	
+	<changeSet author="simon@cell-life.org" id="2.2.5">
+		<comment>Add Contact to SmsLog</comment>
+		<addColumn tableName="smslog">
+			<column name="contact_id" type="BIGINT" />
+		</addColumn>
+		<sql><![CDATA[
+			update smslog l set contact_id = (select id from contact c where
+			c.msisdn = l.msisdn and c.organization_id = l.organization_id)
+		]]></sql>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.2.6">
+		<comment>Increase length of tracking number column to accommodate
+			multiple tracking numbers for long messages</comment>
+		<modifyColumn tableName="smslog">
+			<column name="trackingnumber" type="VARCHAR(255)"/>
+		</modifyColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.2.7">
+		<comment>Change channel shortcode to string</comment>
+		<modifyColumn tableName="channel">
+			<column name="shortcode" type="VARCHAR(50)"/>
+		</modifyColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.2.8">
+		<comment>All smslogs should have channel</comment>
+		<renameColumn tableName="smslog" oldColumnName="inchannel_id"
+			newColumnName="channel_id" columnDataType="BIGINT"/>
+		<sql><![CDATA[
+			update smslog l set channel_id = (select id from channel c where
+			c.handler = l.wasp_mt) where l.wasp_mt is not null
+		]]></sql>
+		<dropColumn tableName="smslog" columnName="wasp_mt"/>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.2.9">
+		<comment>change smstriggerhandler.pros column to TEXT type</comment>
+		<modifyColumn tableName="smstriggerhandler">
+			<column name="props" type="TEXT"/>
+		</modifyColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.2.10">
+		<comment>add ordering to smstriggerhandlers</comment>
+		<addColumn tableName="smstriggerhandler">
+			<column name="order" type="INT"></column>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.2.11">
+		<comment>add Message sending batch size setting</comment>
+		<insert tableName="setting">
+			<column name="description"
+				value="The number of contacts per batch" />
+			<column name="name" value="Message batch size" />
+			<column name="type" value="java.lang.Integer" />
+			<column name="valueString" value="50" />
+		</insert>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.2.12">
+		<comment>change type of Message sending batch size setting</comment>
+		<update tableName="setting">
+			<column name="type" value="POSITIVE_INTEGER"/>
+			<where>name = 'Message batch size'</where>
+		</update>
+	</changeSet>
+</databaseChangeLog>

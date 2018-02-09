@@ -1,0 +1,26 @@
+#**
+This is the template for the email sent from the Report Service for scheduled reports.
+
+Variables that may be used are:
+ - userRequestEmail
+ 
+Velocity generic tools also available. See http://velocity.apache.org/tools/devel/generic/
+*#
+#parse("org/celllife/mobilisr/templates/header.vm")	
+<h3>Scheduled Report</h3>
+
+<b>Report details</b>
+<table cellpadding="3"; cellspacing="3";>
+	<tbody>
+		<tr>
+			<td>Report Generated On:</td><td>$date.format('medium',$generatedDate)</td>
+		</tr>
+		<tr>
+			<td>Report Name:</td><td>${reportName}</td>
+		</tr>
+		<tr>
+			<td>Report ID:</td><td>${reportID}</td>
+		</tr>
+	</tbody>
+</table>	
+#parse("org/celllife/mobilisr/templates/footer.vm")	

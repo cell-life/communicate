@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+    <changeSet author="dine@cell-life.org" id="2.12.1">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <changeSetExecuted id="2.12.1" author="dine@cell-life.org" changeLogFile="db.changelog-2.12.xml"></changeSetExecuted>
+            </not>
+            <not>
+                <columnExists tableName="campaign" columnName="linkedCampaignId"/>
+            </not>
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="fk_campaignId_linkedCampaignId" />
+            </not>
+        </preConditions>
+
+        <comment>Add linked campaign property.</comment>
+
+        <addColumn tableName="campaign">
+            <column name="linkedCampaignId" type="BIGINT">
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint constraintName="fk_campaignId_linkedCampaignId"
+                                 baseTableName="campaign" baseColumnNames="linkedCampaignId"
+                                 referencedTableName="campaign" referencedColumnNames="id" />
+
+    </changeSet>
+
+</databaseChangeLog>
+

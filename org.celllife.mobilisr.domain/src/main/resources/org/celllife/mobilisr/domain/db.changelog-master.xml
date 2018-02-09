@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+	<include file="org/celllife/mobilisr/domain/db.changelog-2.0.xml" />
+	<include file="org/celllife/mobilisr/domain/db.changelog-2.1.xml" />
+	<include file="org/celllife/mobilisr/domain/db.changelog-2.2.xml" />
+	<include file="org/celllife/mobilisr/domain/db.changelog-2.3.xml" />
+	<include file="org/celllife/mobilisr/domain/db.changelog-2.4.xml" />
+	<include file="org/celllife/mobilisr/domain/db.changelog-2.5.xml" />
+	<include file="org/celllife/mobilisr/domain/db.changelog-2.6.xml" />
+    <include file="org/celllife/mobilisr/domain/db.changelog-2.12.xml" />
+    <include file="org/celllife/mobilisr/domain/db.changelog-2.13.xml" />
+    <include file="org/celllife/mobilisr/domain/db.changelog-2.15.xml" />
+
+</databaseChangeLog> 

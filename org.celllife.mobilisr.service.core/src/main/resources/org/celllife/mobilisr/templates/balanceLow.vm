@@ -1,0 +1,20 @@
+#**
+This is the template for client alerts that occur as a result of the user
+requesting an action that can not be performed due to insufficient 
+credits in the organiztion's account.
+
+Variables that may be used are:
+ - hostname
+ - organization : the organization
+ - userRequestEmail : the value of the setting "User request email address"
+ 
+Velocity generic tools also available. See http://velocity.apache.org/tools/devel/generic/
+*#
+#parse("org/celllife/mobilisr/templates/header.vm")	
+<h3>Credit Low Alert</h3>
+<p>The account balance for ${organization.getName()} is running low.</p>
+
+<p><b/>Current balance: ${organization.getAvailableBalance()} credits</b></p>
+
+<p>To load more credits to your account please send an email to <a href="mailto:${userRequestEmail}?subject=Communicate credit purchase">${userRequestEmail}</a></p>
+#parse("org/celllife/mobilisr/templates/footer.vm")	

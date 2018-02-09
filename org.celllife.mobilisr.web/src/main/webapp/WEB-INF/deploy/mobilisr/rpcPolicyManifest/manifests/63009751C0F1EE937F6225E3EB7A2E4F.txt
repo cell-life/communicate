@@ -1,0 +1,2 @@
+serviceClass: org.celllife.mobilisr.service.gwt.MessageLogService
+path: AF0739A837585B9BA339992AEE6B066D.gwt.rpc

@@ -1,0 +1,29 @@
+#**
+This is the template for the email sent when a client requests a new campaign.
+
+Variables that may be used are:
+ - firstname: firstname of the person requesting a new campaign
+ - lastname: lastname of the person requesting a new campaign
+ - organizationName: organization name
+ - userMsisdn: requester's MSISDN
+ - userEmailAddress: requester's email address
+ - requestText: details about the new campaign
+ - requestType: the type of request
+ - userRequestEmail
+ 
+Velocity generic tools also available. See http://velocity.apache.org/tools/devel/generic/
+*#
+#parse("org/celllife/mobilisr/templates/header.vm")	
+<p>Dear Admin,</p>
+
+<p>A Communicate user has made a ${requestType}:<br>
+<ul>
+	<li>Organisation: ${organizationName}</li>
+	<li>First Name: ${firstName}</li>
+	<li>Surname: ${lastName}</li>
+	<li>Mobile Number: ${userMsisdn}</li>
+	<li>Email: ${userEmailAddress}</li>
+	<li>Description: ${requestText}</li>
+</ul>	
+</p>
+#parse("org/celllife/mobilisr/templates/footer.vm")	

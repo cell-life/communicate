@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+	<changeSet author="dine@cell-life.org" id="2.4.1">
+		<comment>add end date to campaign contact</comment>
+		<addColumn tableName="campaigncontact">
+			<column name="endDate" type="DATE" defaultValue="NULL"/>	
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.4.2">
+		<comment>change campaign type names</comment>
+		<update tableName="campaign">
+			<column name="type" value="DAILY"/>
+			<where>type = 'RELATIVE'</where>
+		</update>
+		<update tableName="campaign">
+			<column name="type" value="FLEXI"/>
+			<where>type = 'GENERIC'</where>
+		</update>
+	</changeSet>	
+	<changeSet author="simon@cell-life.org" id="2.4.3">
+		<comment>Increase length of setting name column</comment>
+		<modifyColumn tableName="setting">
+			<column name="name" type="VARCHAR(100)"/>
+		</modifyColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.4.4">
+		<comment>rename permissions CREDIT_ORGANISATION_BALANCE 
+			and MANAGE_ORGANISATIONS</comment>
+		<sql><![CDATA[
+			update role set permissions = replace(permissions, 
+			'CREDIT_ORGANISATION_BALANCE', 'ORGANISATIONS_CREDIT_BALANCE');
+		]]></sql>
+		<sql><![CDATA[
+			update role set permissions = replace(permissions, 
+			'MANAGE_ORGANISATIONS', 'ORGANISATIONS_MANAGE');
+		]]></sql>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.4.5">
+		<comment>remove reserveRef from campaigncontact</comment>
+		<dropColumn tableName="campaigncontact" columnName="reserveRef"/>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.4.6">
+		<comment>change mailmessage.text column to TEXT</comment>
+		<modifyColumn tableName="mailmessage">
+			<column name="text" type="TEXT"/>
+		</modifyColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.4.7">
+		<comment>add dateactivated and datedeactivated to channel</comment>
+		<addColumn tableName="channel">
+			<column name="dateactivated" type="TIMESTAMP"/>
+			<column name="datedeactivated" type="TIMESTAMP"/>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.4.8">
+		<comment>add loginsinceupgrade to user</comment>
+		<addColumn tableName="user">
+			<column name="loginsinceupgrade" type="BOOLEAN" defaultValueBoolean="false"/>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.4.9">
+		<comment>add rank column to messagefilter table</comment>
+		<addColumn tableName="messagefilter">
+			<column name="rank" type="INT">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+	</changeSet>
+</databaseChangeLog>

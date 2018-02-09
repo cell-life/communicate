@@ -1,0 +1,2 @@
+serviceClass: org.celllife.mobilisr.service.gwt.CampaignService
+path: 55F48251CCC5826D1EF780EF19558C49.gwt.rpc

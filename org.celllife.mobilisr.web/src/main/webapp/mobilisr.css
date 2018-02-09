@@ -1,0 +1,115 @@
+.footer {
+	color: #666;
+}
+
+.font_14{
+ font-size: 14pt;
+}
+
+.anchor{
+	font-size: 11pt;
+	font-color: blue;
+	margin-left: 60px;
+}
+
+.header{
+	font-size: 11pt;
+}	
+
+.personForm{
+	background-color:white;
+}
+
+.footer{
+	font-size: 11pt;
+}
+
+.gridLabel{
+	font: 11px arial,tahoma,helvetica,sans-serif
+}
+
+.create-success{
+	background-color:#A9F5A9;
+	border:2px solid green;
+	font-size:11pt;
+	padding:2px;
+	text-align:left;
+	width:97%;
+}
+
+.create-success:before{
+	content: url(images/success.png);
+	padding: 0px 2px;
+}
+
+.create-error{
+	background-color:#F78181;
+	border:2px solid red;
+	font-size:11pt;
+	padding:2px;
+	text-align:left;
+	width:97%;
+}
+
+.create-error:before{
+	content: url(images/error.png);
+	padding: 0px 5px;
+}
+
+.create-gridrowerror{
+	border-left: 2px solid red;
+	border-top: 2px solid red;
+	border-bottom: 2px solid red;
+}
+
+.container{
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+}
+
+.hrblue {
+	border: 0;
+	color: #99BBE8;
+	background-color: #99BBE8;
+	height: 1px;
+}
+.ext-ux-wiz-Header {
+	background-color:white;
+}
+
+.ext-ux-wiz-Header-title {
+	font-weight: bold;
+  	font-size: 11px;
+    padding: 4px 0px 0px 4px;
+}
+
+.ext-ux-wiz-Header-step {
+    color:#767676;
+  	font-size: 11px;
+    text-align:right;
+    padding:2px 4px 0px 0px;
+}
+
+.ext-ux-wiz-Header-stepIndicator-container {
+        float:right;    
+        margin-right:6px;
+        margin-top:8px;
+}
+
+.ext-ux-wiz-Header-stepIndicator {
+        margin-left:28px;
+        float:left;
+}
+
+/* Format for the contact and campaigncontact list */
+.row-invalid.x-grid3-row {
+ background-color:#FF9D9D !important;
+}
+.row-invalid.x-grid3-row-selected {
+ background-color:#EF3B3B !important;
+}
+
+.row-invalid.x-grid3-row-over{
+ background-color:#EF7B7B !important;
+ background-image:none !important;
+}

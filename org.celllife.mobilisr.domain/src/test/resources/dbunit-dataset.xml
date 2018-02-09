@@ -1,0 +1,203 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <organization id="11" balance="10000" name="Admin organisation" reserved="0" balancethreshold="0" voided="false"/>
+  <organization id="12" balance="10000" name="test org 0" reserved="0" balancethreshold="0" voided="false"/>
+  <organization id="13" balance="10000" name="test org 5" reserved="0" balancethreshold="0" voided="false"/>
+  <user id="43" emailaddress="admin@mobilisr.org" firstname="admin" lastname="admin" msisdn="27722545698" password="5074d3501fe15f27170ee15e13b7c864130adc9c" salt="170b8223e596c12d314f9fa80cc54f1673791484" username="admin" organization_id="11" voided="false"/>
+  <user id="44" emailaddress="t0@t.com" firstname="firstname 0" lastname="lastname 9" msisdn="32424220" password="testpassword" salt="c33eda9fae2b402d9e554a56cd442cfd42e5b80e" username="temp_username 0" organization_id="12" voided="false"/>
+  <user id="45" emailaddress="fsfs0@dfsfs.com" firstname="firstname 0" lastname="lastname 9" msisdn="4222242420" password="testpassword" salt="adb2320c4af5821a0307a3c55c56a679745e300b" username="username 0" organization_id="12" voided="false"/>
+  <user id="46" emailaddress="fsfs1@dfsfs.com" firstname="firstname 1" lastname="lastname 8" msisdn="4222242421" password="testpassword" salt="e4909550ff85b578adc0b5174e495b2735c99ce1" username="username 1" organization_id="12" voided="false"/>
+  <user id="47" emailaddress="fsfs2@dfsfs.com" firstname="firstname 2" lastname="lastname 7" msisdn="4222242422" password="testpassword" salt="176ef836fe07c723c58b43d52934aa6f29e211de" username="username 2" organization_id="12" voided="false"/>
+  <user id="48" emailaddress="fsfs3@dfsfs.com" firstname="firstname 3" lastname="lastname 6" msisdn="4222242423" password="testpassword" salt="6a3455d1452643a8d133339e3194958e4bacf628" username="username 3" organization_id="12" voided="false"/>
+  <user id="49" emailaddress="fsfs4@dfsfs.com" firstname="firstname 4" lastname="lastname 5" msisdn="4222242424" password="testpassword" salt="c294a4f7ceae0594ccb1e94e8d2a61929fe05f06" username="username 4" organization_id="12" voided="false"/>
+  <user id="50" emailaddress="t5@t.com" firstname="firstname 5" lastname="lastname 4" msisdn="32424225" password="testpassword" salt="92be8be87537d87579fdb933fb0aadc62d8fd92e" username="temp_username 5" organization_id="13" voided="false"/>
+  <user id="51" emailaddress="fsfs5@dfsfs.com" firstname="firstname 5" lastname="lastname 4" msisdn="4222242425" password="testpassword" salt="d71cbec23b653099c9b124e156f343878fc0ad11" username="username 5" organization_id="13" voided="false"/>
+  <user id="52" emailaddress="fsfs6@dfsfs.com" firstname="firstname 6" lastname="lastname 3" msisdn="4222242426" password="testpassword" salt="104182e8cf020b907bcfe73aa3e8ba94ff2ab506" username="username 6" organization_id="13" voided="false"/>
+  <user id="53" emailaddress="fsfs7@dfsfs.com" firstname="firstname 7" lastname="lastname 2" msisdn="4222242427" password="testpassword" salt="f244926e35854add71b3516e527a1364bac4782d" username="username 7" organization_id="13" voided="false"/>
+  <user id="54" emailaddress="fsfs8@dfsfs.com" firstname="firstname 8" lastname="lastname 1" msisdn="4222242428" password="testpassword" salt="c982c1df58caf42a02c84cb2b770e855a928c067" username="username 8" organization_id="13" voided="false"/>
+  <user id="55" emailaddress="fsfs9@dfsfs.com" firstname="firstname 9" lastname="lastname 0" msisdn="4222242429" password="testpassword" salt="023d4610c434acff15918b5d9e0f6c9e41e5bfec" username="username 9" organization_id="13" voided="false"/>
+  <apikey/>
+  <campaign id="58" description="" duration="0" name="Program 0" status="INACTIVE" timesPerDay="0" type="FIXED" version="0" org_id="12" sendNow="false" welcomemessage="" cost="0" voided="false" contactcount="0" messagecount="0"/>
+  <campaign id="59" description="" duration="0" name="Program 5" status="INACTIVE" timesPerDay="0" type="FIXED" version="0" org_id="13" sendNow="false" welcomemessage="" cost="0" voided="false" contactcount="0" messagecount="0"/>
+  <campaigncontact id="323" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 0" campaign_id="58" contact_id="81" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="324" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 1" campaign_id="58" contact_id="82" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="325" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 2" campaign_id="58" contact_id="83" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="326" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 3" campaign_id="58" contact_id="84" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="327" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 4" campaign_id="58" contact_id="85" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="328" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 5" campaign_id="58" contact_id="86" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="329" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 6" campaign_id="58" contact_id="87" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="330" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 7" campaign_id="58" contact_id="88" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="331" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 8" campaign_id="58" contact_id="89" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="332" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 9" campaign_id="58" contact_id="90" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="333" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 10" campaign_id="58" contact_id="91" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="334" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 11" campaign_id="58" contact_id="92" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="335" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 12" campaign_id="58" contact_id="93" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="336" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 13" campaign_id="58" contact_id="94" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="337" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 14" campaign_id="58" contact_id="95" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="338" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 15" campaign_id="58" contact_id="96" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="339" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 16" campaign_id="58" contact_id="97" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="340" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 17" campaign_id="58" contact_id="98" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="341" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 18" campaign_id="58" contact_id="99" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="342" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 19" campaign_id="58" contact_id="100" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="343" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 100" campaign_id="59" contact_id="101" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="344" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 101" campaign_id="59" contact_id="102" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="345" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 102" campaign_id="59" contact_id="103" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="346" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 103" campaign_id="59" contact_id="104" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="347" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 104" campaign_id="59" contact_id="105" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="348" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 105" campaign_id="59" contact_id="106" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="349" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 106" campaign_id="59" contact_id="107" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="350" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 107" campaign_id="59" contact_id="108" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="351" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 108" campaign_id="59" contact_id="109" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="352" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 109" campaign_id="59" contact_id="110" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="353" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 110" campaign_id="59" contact_id="111" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="354" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 111" campaign_id="59" contact_id="112" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="355" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 112" campaign_id="59" contact_id="113" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="356" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 113" campaign_id="59" contact_id="114" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="357" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 114" campaign_id="59" contact_id="115" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="358" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 115" campaign_id="59" contact_id="116" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="359" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 116" campaign_id="59" contact_id="117" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="360" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 117" campaign_id="59" contact_id="118" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="361" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 118" campaign_id="59" contact_id="119" receivedwelcome="false" invalid="false"/>
+  <campaigncontact id="362" progress="0" joinedDate="2012-01-23" mobileNetwork="MTN" msisdn="MSISDN 119" campaign_id="59" contact_id="120" receivedwelcome="false" invalid="false"/>
+  <campaignmessage/>
+  <channel id="80" handler="Integrat" name="Test Channel" shortcode="0" type="OUT" voided="true" datedeactivated="2012-01-23 15:57:59.0"/>
+  <channel id="81" handler="mockOutChannel" name="Mock channel" shortcode="1" type="OUT" voided="false"/>
+  <channelconfig/>
+  <contact id="81" firstname="test org 00" lastname="contact lName0" mobilenetwork="MTN" msisdn="MSISDN 0" version="0" organization_id="12" invalid="true"/>
+  <contact id="82" firstname="test org 01" lastname="contact lName1" mobilenetwork="MTN" msisdn="MSISDN 1" version="0" organization_id="12" invalid="false"/>
+  <contact id="83" firstname="test org 02" lastname="contact lName2" mobilenetwork="MTN" msisdn="MSISDN 2" version="0" organization_id="12" invalid="false"/>
+  <contact id="84" firstname="test org 03" lastname="contact lName3" mobilenetwork="MTN" msisdn="MSISDN 3" version="0" organization_id="12" invalid="false"/>
+  <contact id="85" firstname="test org 04" lastname="contact lName4" mobilenetwork="MTN" msisdn="MSISDN 4" version="0" organization_id="12" invalid="false"/>
+  <contact id="86" firstname="test org 05" lastname="contact lName5" mobilenetwork="MTN" msisdn="MSISDN 5" version="0" organization_id="12" invalid="false"/>
+  <contact id="87" firstname="test org 06" lastname="contact lName6" mobilenetwork="MTN" msisdn="MSISDN 6" version="0" organization_id="12" invalid="false"/>
+  <contact id="88" firstname="test org 07" lastname="contact lName7" mobilenetwork="MTN" msisdn="MSISDN 7" version="0" organization_id="12" invalid="false"/>
+  <contact id="89" firstname="test org 08" lastname="contact lName8" mobilenetwork="MTN" msisdn="MSISDN 8" version="0" organization_id="12" invalid="false"/>
+  <contact id="90" firstname="test org 09" lastname="contact lName9" mobilenetwork="MTN" msisdn="MSISDN 9" version="0" organization_id="12" invalid="false"/>
+  <contact id="91" firstname="test org 010" lastname="contact lName10" mobilenetwork="MTN" msisdn="MSISDN 10" version="0" organization_id="12" invalid="false"/>
+  <contact id="92" firstname="test org 011" lastname="contact lName11" mobilenetwork="MTN" msisdn="MSISDN 11" version="0" organization_id="12" invalid="false"/>
+  <contact id="93" firstname="test org 012" lastname="contact lName12" mobilenetwork="MTN" msisdn="MSISDN 12" version="0" organization_id="12" invalid="false"/>
+  <contact id="94" firstname="test org 013" lastname="contact lName13" mobilenetwork="MTN" msisdn="MSISDN 13" version="0" organization_id="12" invalid="false"/>
+  <contact id="95" firstname="test org 014" lastname="contact lName14" mobilenetwork="MTN" msisdn="MSISDN 14" version="0" organization_id="12" invalid="false"/>
+  <contact id="96" firstname="test org 015" lastname="contact lName15" mobilenetwork="MTN" msisdn="MSISDN 15" version="0" organization_id="12" invalid="false"/>
+  <contact id="97" firstname="test org 016" lastname="contact lName16" mobilenetwork="MTN" msisdn="MSISDN 16" version="0" organization_id="12" invalid="false"/>
+  <contact id="98" firstname="test org 017" lastname="contact lName17" mobilenetwork="MTN" msisdn="MSISDN 17" version="0" organization_id="12" invalid="false"/>
+  <contact id="99" firstname="test org 018" lastname="contact lName18" mobilenetwork="MTN" msisdn="MSISDN 18" version="0" organization_id="12" invalid="false"/>
+  <contact id="100" firstname="test org 019" lastname="contact lName19" mobilenetwork="MTN" msisdn="MSISDN 19" version="0" organization_id="12" invalid="false"/>
+  <contact id="101" firstname="test org 50" lastname="contact lName5" mobilenetwork="MTN" msisdn="MSISDN 100" version="0" organization_id="13" invalid="false"/>
+  <contact id="102" firstname="test org 51" lastname="contact lName6" mobilenetwork="MTN" msisdn="MSISDN 101" version="0" organization_id="13" invalid="false"/>
+  <contact id="103" firstname="test org 52" lastname="contact lName7" mobilenetwork="MTN" msisdn="MSISDN 102" version="0" organization_id="13" invalid="false"/>
+  <contact id="104" firstname="test org 53" lastname="contact lName8" mobilenetwork="MTN" msisdn="MSISDN 103" version="0" organization_id="13" invalid="false"/>
+  <contact id="105" firstname="test org 54" lastname="contact lName9" mobilenetwork="MTN" msisdn="MSISDN 104" version="0" organization_id="13" invalid="false"/>
+  <contact id="106" firstname="test org 55" lastname="contact lName10" mobilenetwork="MTN" msisdn="MSISDN 105" version="0" organization_id="13" invalid="false"/>
+  <contact id="107" firstname="test org 56" lastname="contact lName11" mobilenetwork="MTN" msisdn="MSISDN 106" version="0" organization_id="13" invalid="false"/>
+  <contact id="108" firstname="test org 57" lastname="contact lName12" mobilenetwork="MTN" msisdn="MSISDN 107" version="0" organization_id="13" invalid="false"/>
+  <contact id="109" firstname="test org 58" lastname="contact lName13" mobilenetwork="MTN" msisdn="MSISDN 108" version="0" organization_id="13" invalid="false"/>
+  <contact id="110" firstname="test org 59" lastname="contact lName14" mobilenetwork="MTN" msisdn="MSISDN 109" version="0" organization_id="13" invalid="false"/>
+  <contact id="111" firstname="test org 510" lastname="contact lName15" mobilenetwork="MTN" msisdn="MSISDN 110" version="0" organization_id="13" invalid="false"/>
+  <contact id="112" firstname="test org 511" lastname="contact lName16" mobilenetwork="MTN" msisdn="MSISDN 111" version="0" organization_id="13" invalid="false"/>
+  <contact id="113" firstname="test org 512" lastname="contact lName17" mobilenetwork="MTN" msisdn="MSISDN 112" version="0" organization_id="13" invalid="false"/>
+  <contact id="114" firstname="test org 513" lastname="contact lName18" mobilenetwork="MTN" msisdn="MSISDN 113" version="0" organization_id="13" invalid="false"/>
+  <contact id="115" firstname="test org 514" lastname="contact lName19" mobilenetwork="MTN" msisdn="MSISDN 114" version="0" organization_id="13" invalid="false"/>
+  <contact id="116" firstname="test org 515" lastname="contact lName20" mobilenetwork="MTN" msisdn="MSISDN 115" version="0" organization_id="13" invalid="false"/>
+  <contact id="117" firstname="test org 516" lastname="contact lName21" mobilenetwork="MTN" msisdn="MSISDN 116" version="0" organization_id="13" invalid="false"/>
+  <contact id="118" firstname="test org 517" lastname="contact lName22" mobilenetwork="MTN" msisdn="MSISDN 117" version="0" organization_id="13" invalid="false"/>
+  <contact id="119" firstname="test org 518" lastname="contact lName23" mobilenetwork="MTN" msisdn="MSISDN 118" version="0" organization_id="13" invalid="false"/>
+  <contact id="120" firstname="test org 519" lastname="contact lName24" mobilenetwork="MTN" msisdn="MSISDN 119" version="0" organization_id="13" invalid="false"/>
+  <contactgroup id="61" groupname="Test Group 00" org_id="12"/>
+  <contactgroup id="62" groupname="Test Group 01" org_id="12"/>
+  <contactgroup id="63" groupname="Test Group 02" org_id="12"/>
+  <contactgroup id="64" groupname="Test Group 03" org_id="12"/>
+  <contactgroup id="65" groupname="Test Group 04" org_id="12"/>
+  <contactgroup id="66" groupname="Test Group 05" org_id="12"/>
+  <contactgroup id="67" groupname="Test Group 06" org_id="12"/>
+  <contactgroup id="68" groupname="Test Group 07" org_id="12"/>
+  <contactgroup id="69" groupname="Test Group 08" org_id="12"/>
+  <contactgroup id="70" groupname="Test Group 09" org_id="12"/>
+  <contactgroup id="71" groupname="Test Group 50" org_id="13"/>
+  <contactgroup id="72" groupname="Test Group 51" org_id="13"/>
+  <contactgroup id="73" groupname="Test Group 52" org_id="13"/>
+  <contactgroup id="74" groupname="Test Group 53" org_id="13"/>
+  <contactgroup id="75" groupname="Test Group 54" org_id="13"/>
+  <contactgroup id="76" groupname="Test Group 55" org_id="13"/>
+  <contactgroup id="77" groupname="Test Group 56" org_id="13"/>
+  <contactgroup id="78" groupname="Test Group 57" org_id="13"/>
+  <contactgroup id="79" groupname="Test Group 58" org_id="13"/>
+  <contactgroup id="80" groupname="Test Group 59" org_id="13"/>
+  <contact_contactgroup id="10" contact_id="81" contactGroup_id="61"/>
+  <contact_contactgroup id="11" contact_id="81" contactGroup_id="62"/>
+  <contact_contactgroup id="12" contact_id="82" contactGroup_id="62"/>
+  <contactmsgtime id="1" msgSlot="1" msgTime="15:57:59" campaign_id="58" campcontact_id="323"/>
+  <contactmsgtime id="2" msgSlot="1" msgTime="15:57:59" campaign_id="58" campcontact_id="324"/>
+  <contactmsgtime id="3" msgSlot="1" msgTime="15:57:59" campaign_id="58" campcontact_id="325"/>
+  <contactmsgtime id="4" msgSlot="1" msgTime="15:57:59" campaign_id="58" campcontact_id="326"/>
+  <contactmsgtime id="5" msgSlot="1" msgTime="15:57:59" campaign_id="58" campcontact_id="327"/>
+  <contactmsgtime id="6" msgSlot="1" msgTime="15:57:59" campaign_id="58" campcontact_id="328"/>
+  <contactmsgtime id="7" msgSlot="1" msgTime="15:57:59" campaign_id="58" campcontact_id="329"/>
+  <contactmsgtime id="8" msgSlot="1" msgTime="15:57:59" campaign_id="58" campcontact_id="330"/>
+  <contactmsgtime id="9" msgSlot="1" msgTime="15:57:59" campaign_id="58" campcontact_id="331"/>
+  <contactmsgtime id="10" msgSlot="1" msgTime="15:57:59" campaign_id="58" campcontact_id="332"/>
+  <contactmsgtime id="11" msgSlot="1" msgTime="15:58:00" campaign_id="58" campcontact_id="333"/>
+  <contactmsgtime id="12" msgSlot="1" msgTime="15:58:00" campaign_id="58" campcontact_id="334"/>
+  <contactmsgtime id="13" msgSlot="1" msgTime="15:58:00" campaign_id="58" campcontact_id="335"/>
+  <contactmsgtime id="14" msgSlot="1" msgTime="15:58:00" campaign_id="58" campcontact_id="336"/>
+  <contactmsgtime id="15" msgSlot="1" msgTime="15:58:00" campaign_id="58" campcontact_id="337"/>
+  <contactmsgtime id="16" msgSlot="1" msgTime="15:58:00" campaign_id="58" campcontact_id="338"/>
+  <contactmsgtime id="17" msgSlot="1" msgTime="15:58:00" campaign_id="58" campcontact_id="339"/>
+  <contactmsgtime id="18" msgSlot="1" msgTime="15:58:00" campaign_id="58" campcontact_id="340"/>
+  <contactmsgtime id="19" msgSlot="1" msgTime="15:58:00" campaign_id="58" campcontact_id="341"/>
+  <contactmsgtime id="20" msgSlot="1" msgTime="15:58:00" campaign_id="58" campcontact_id="342"/>
+  <contactmsgtime id="21" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="343"/>
+  <contactmsgtime id="22" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="344"/>
+  <contactmsgtime id="23" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="345"/>
+  <contactmsgtime id="24" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="346"/>
+  <contactmsgtime id="25" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="347"/>
+  <contactmsgtime id="26" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="348"/>
+  <contactmsgtime id="27" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="349"/>
+  <contactmsgtime id="28" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="350"/>
+  <contactmsgtime id="29" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="351"/>
+  <contactmsgtime id="30" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="352"/>
+  <contactmsgtime id="31" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="353"/>
+  <contactmsgtime id="32" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="354"/>
+  <contactmsgtime id="33" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="355"/>
+  <contactmsgtime id="34" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="356"/>
+  <contactmsgtime id="35" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="357"/>
+  <contactmsgtime id="36" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="358"/>
+  <contactmsgtime id="37" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="359"/>
+  <contactmsgtime id="38" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="360"/>
+  <contactmsgtime id="39" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="361"/>
+  <contactmsgtime id="40" msgSlot="1" msgTime="15:58:00" campaign_id="59" campcontact_id="362"/>
+  <messagefilter/>
+  <filteraction/>
+  <mailmessage/>
+  <numberinfo/>
+  <organization_channel/>
+  <role id="35" name="ADMINISTRATOR" permissions="ROLE_ADMIN"/>
+  <role id="36" name="role0" permissions="ORGANISATIONS_CREDIT_BALANCE"/>
+  <role id="37" name="role1" permissions="ORGANISATIONS_CREDIT_BALANCE"/>
+  <role id="38" name="role2" permissions="ORGANISATIONS_CREDIT_BALANCE"/>
+  <role id="39" name="role3" permissions="ORGANISATIONS_CREDIT_BALANCE"/>
+  <role id="40" name="role4" permissions="ORGANISATIONS_CREDIT_BALANCE"/>
+  <role id="41" name="role5" permissions="ORGANISATIONS_CREDIT_BALANCE"/>
+  <role id="42" name="role6" permissions="ORGANISATIONS_CREDIT_BALANCE"/>
+  <role id="43" name="role7" permissions="ORGANISATIONS_CREDIT_BALANCE"/>
+  <role id="44" name="role8" permissions="ORGANISATIONS_CREDIT_BALANCE"/>
+  <role id="45" name="role9" permissions="ORGANISATIONS_CREDIT_BALANCE"/>
+  <setting/>
+  <smslog/>
+  <transaction id="263" cost="10000" reserved="0" datetime="2012-01-23 15:57:59.0" message="initial balance" createdfor="test setup" createdby="test setup" user_id="43" organization_id="11"/>
+  <transaction id="264" cost="10000" reserved="0" datetime="2012-01-23 15:57:59.0" message="initial balance" createdfor="test setup" createdby="test setup" user_id="44" organization_id="12"/>
+  <transaction id="265" cost="10000" reserved="0" datetime="2012-01-23 15:58:00.0" message="initial balance" createdfor="test setup" createdby="test setup" user_id="50" organization_id="13"/>
+  <user_role user_Id="43" role_Id="35"/>
+  <user_role user_Id="44" role_Id="36"/>
+  <user_role user_Id="45" role_Id="36"/>
+  <user_role user_Id="46" role_Id="37"/>
+  <user_role user_Id="47" role_Id="38"/>
+  <user_role user_Id="48" role_Id="39"/>
+  <user_role user_Id="49" role_Id="40"/>
+  <user_role user_Id="50" role_Id="41"/>
+  <user_role user_Id="51" role_Id="41"/>
+  <user_role user_Id="52" role_Id="42"/>
+  <user_role user_Id="53" role_Id="43"/>
+  <user_role user_Id="54" role_Id="44"/>
+  <user_role user_Id="55" role_Id="45"/>
+</dataset>

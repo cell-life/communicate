@@ -1,0 +1,33 @@
+#**
+This is the template for the email sent from the Email Trigger Handler
+
+Variables that may be used are:
+ - msisdn: mobile number of the sender
+ - messageText: the message text
+ - dateReceived: the date the message was received
+ - receiver: the number that the message was received on
+ - userRequestEmail
+ 
+Velocity generic tools also available. See http://velocity.apache.org/tools/devel/generic/
+*#
+#parse("org/celllife/mobilisr/templates/header.vm")	
+<h3>Incoming message notification</h3>
+
+<b>Message details</b>
+<table cellpadding="3"; cellspacing="3";>
+	<tbody>
+		<tr>
+			<td>Message from:</td><td>${sender}</td>
+		</tr>
+		<tr>
+			<td>Received on:</td><td>$date.format('medium',$dateReceived)</td>
+		</tr>
+		<tr>
+			<td>Message sent to:</td><td>${receiver}</td>
+		</tr>
+	</tbody>
+</table>	
+
+<h3>Message text</h3>
+<p>${messageText}</p>
+#parse("org/celllife/mobilisr/templates/footer.vm")	

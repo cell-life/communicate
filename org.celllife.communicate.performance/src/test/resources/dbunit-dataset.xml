@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <campaign/>
+  <campaigncontact/>
+  <campaignmessage/>
+  <channel/>
+  <channelconfig/>
+  <contact/>
+  <contactgroup/>
+  <contact_contactgroup/>
+  <contactmsgtime/>
+  <messagefilter/>
+  <filteraction/>
+  <mailmessage/>
+  <numberinfo/>
+  <organization id="4" balance="1000000" name="Admin organisation" reserved="0" balancethreshold="0" voided="false"/>
+  <organization_channel/>
+  <role id="4" name="ADMINISTRATOR" permissions="ROLE_ADMIN"/>
+  <setting/>
+  <smslog/>
+  <transaction id="4" cost="1000000" reserved="0" datetime="2011-11-18 15:48:17.0" message="initial balance" createdfor="test setup" createdby="test setup" user_id="4" organization_id="4"/>
+  <user id="4" emailaddress="admin@mobilisr.org" firstname="admin" lastname="admin" msisdn="27722545698" password="5074d3501fe15f27170ee15e13b7c864130adc9c" salt="170b8223e596c12d314f9fa80cc54f1673791484" username="admin" organization_id="4" voided="false"/>
+  <user_role user_Id="4" role_Id="4"/>
+</dataset>

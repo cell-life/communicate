@@ -1,0 +1,2 @@
+serviceClass: org.celllife.mobilisr.service.gwt.ContactService
+path: 66A22F3F1F8138B8D5B5AC8FC8344AF8.gwt.rpc

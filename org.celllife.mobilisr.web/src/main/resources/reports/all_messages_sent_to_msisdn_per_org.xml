@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<pconfig xmlns="http://www.cell-life.org/schemas/pconfig"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.cell-life.org/schemas/pconfig http://www.cell-life.org/schemas/pconfig/pconfig-1.0.xsd">
+	<id>all_messages_sent_to_msisdn_per_org</id>
+	<label>All messages sent to MSISDN</label>
+	<resource>all_messages_sent_to_msisdn.jasper</resource>
+	<parameters>
+		<entity name="organisation" entityClass="org.celllife.mobilisr.domain.Organization"
+			displayProperty="name"
+			valueProperty="name" valueType="String" autofill="true" hidden="true"/>
+		<text name="msisdn" label="MSISDN" regex="^27[1-9][0-9]{8}$"
+			errorMessage="This field only accepts numbers of this format: 27821231234"/>
+		<text name="status" label="Status" defaultValue="%"/>
+		<label value="If not set, Status defaults to all statuses (%)." />
+	</parameters>
+</pconfig>

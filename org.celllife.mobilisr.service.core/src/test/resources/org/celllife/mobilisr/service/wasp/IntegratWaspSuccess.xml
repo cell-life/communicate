@@ -1,0 +1,6 @@
+<Response status_code="0" token="#%#TOK_I1JlZjwwLjAuMC4xMTg5ND4=">
+    <Data name="msg_generic_rsp">
+        <field name="msg_no" value="2"/>
+        <field name="seq_no" value="{0,number,#}"/>
+    </Data>
+</Response>

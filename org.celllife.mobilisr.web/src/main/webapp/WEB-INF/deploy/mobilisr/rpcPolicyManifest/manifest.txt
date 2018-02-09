@@ -1,0 +1,16 @@
+# Module mobilisr
+# RPC service class, partial path of RPC policy file
+org.celllife.mobilisr.service.gwt.ExportService, 9C9AD8E29EFD8C3D2B05E3CF292A9702.gwt.rpc
+org.celllife.mobilisr.service.gwt.ReportService, 3752287BAEA747351B5994C35C09EB16.gwt.rpc
+org.celllife.mobilisr.service.gwt.AdminService, 0A015E30BC836CBF9EA39CEF83406F63.gwt.rpc
+com.google.gwt.logging.shared.RemoteLoggingService, 7B843C9D30C443EBC21EBE2712846D43.gwt.rpc
+org.celllife.mobilisr.service.gwt.OrganizationService, 3026D7E0498E872F599FC7C002A2C07D.gwt.rpc
+org.celllife.mobilisr.service.gwt.CampaignService, 55F48251CCC5826D1EF780EF19558C49.gwt.rpc
+org.celllife.mobilisr.service.gwt.MessageLogService, AF0739A837585B9BA339992AEE6B066D.gwt.rpc
+org.celllife.mobilisr.service.gwt.SettingService, 26949947A78A2C32969B9568B2FFE121.gwt.rpc
+org.celllife.mobilisr.service.gwt.ChannelService, AB98C84502EB5DC09FF7F4E182EF6DF8.gwt.rpc
+org.celllife.mobilisr.service.gwt.MessageFilterService, F61EB46C51F2CA33BA101C930B01716E.gwt.rpc
+org.celllife.mobilisr.service.gwt.RoleService, 552BBDB83D17AA3850BABA0E4B1F7771.gwt.rpc
+org.celllife.mobilisr.service.gwt.ContactService, 66A22F3F1F8138B8D5B5AC8FC8344AF8.gwt.rpc
+org.celllife.mobilisr.service.gwt.UserService, E3F6B70767EB7436EEEF69AAF4F159B8.gwt.rpc
+org.celllife.mobilisr.service.gwt.ScheduleService, 8459CB8CE67F606FF26674AB6F5FA18B.gwt.rpc

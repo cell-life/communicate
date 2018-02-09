@@ -1,0 +1,35 @@
+#**
+This is the template for credit notifications which get sent whenever an organisation account
+is credid.
+
+Variables that may be used are:
+ - amount : the amount that was credit to the organisation account
+ - transactionMessage : the transaction message
+ - organization : the organisation
+ - user : the user who performed the credit
+ - userRequestEmail
+ 
+Velocity generic tools also available. See http://velocity.apache.org/tools/devel/generic/
+*#
+#parse("org/celllife/mobilisr/templates/header.vm")				
+<h3>Automated account credit notification</h3>
+<p>The account for '${organization.getName()}' has been credited with ${amount} credits.</p>
+<p><b>Details</b></p>
+<table cellpadding="3"; cellspacing="3";>
+	<tbody>
+		<tr>
+			<td>Organisation:</td><td>${organization.getName()}</td>
+		</tr>
+		<tr>
+			<td>User who performed the credit:</td><td>${user.getFullName()}</td>
+		</tr>
+		<tr>
+			<td>Amount that was credited:</td><td>${amount}</td>
+		</tr>
+		<tr>
+			<td>Transaction message:</td><td>${transactionMessage}</td>
+		</tr>
+	</tbody>
+</table>
+
+#parse("org/celllife/mobilisr/templates/footer.vm")

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="org.celllife.mobilisr.domain" />
+	<context:component-scan base-package="org.celllife.mobilisr.dao" />
+
+	<bean id="appProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="singleton" value="true" />
+		<property name="location" value="file:///${COMMUNICATE_HOME}/communicate.properties" />
+	</bean>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${jdbc.driver}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- Pool properties -->
+		<property name="minPoolSize" value="5" />
+		<property name="maxPoolSize" value="${database.maxPoolSize:50}" />
+		<property name="acquireIncrement" value="5" />
+		<property name="maxStatementsPerConnection" value="30" />
+		<property name="idleConnectionTestPeriod" value="1800" />
+		<property name="maxIdleTime" value="3600" />
+		<property name="maxIdleTimeExcessConnections" value="300" />
+		<property name="numHelperThreads" value="8" />
+		<property name="unreturnedConnectionTimeout" value="3600" />
+	</bean>	
+	
+	<bean id="liquibase" class="org.celllife.mobilisr.util.SpringLiquibaseUpdater"
+		init-method="init">
+		<property name="dataSource" ref="dataSource" />
+		<property name="changeLog" value="classpath:org/celllife/mobilisr/domain/db.changelog-master.xml" />
+	</bean>
+
+	<bean id="sessionFactory" depends-on="liquibase"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="org.celllife.mobilisr.domain" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.connection.charSet">UTF-8</prop>
+				<prop key="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.EhCacheRegionFactory</prop>
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">validate</prop>
+				<prop key="hibernate.jdbc.batch_size">50</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<tx:annotation-driven proxy-target-class="true"/>
+
+	<!-- Apply transactions to all methods in our dao layer. -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="remove*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:aspectj-autoproxy/>
+	<aop:config>
+		<aop:pointcut id="GenericDAO"
+			expression="execution(* com.trg.dao.hibernate.GenericDAO.*(..))" />
+		<aop:pointcut id="GeneralDAO"
+			expression="execution(* com.trg.dao.hibernate.GeneralDAO.*(..))" />
+
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="GenericDAO" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="GeneralDAO" />
+	</aop:config>
+
+	<bean id="proxySerializer" class="net.sf.gilead.core.serialization.GwtProxySerialization" />
+
+	<bean id="proxyStore" class="net.sf.gilead.core.store.stateless.StatelessProxyStore">
+		<property name="proxySerializer" ref="proxySerializer" />
+	</bean>
+
+	<bean id="persistenceUtil" class="net.sf.gilead.core.hibernate.HibernateUtil">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="persistentBeanManager" class="net.sf.gilead.core.PersistentBeanManager">
+		<property name="proxyStore" ref="proxyStore" />
+		<property name="persistenceUtil" ref="persistenceUtil" />
+	</bean>
+
+</beans>

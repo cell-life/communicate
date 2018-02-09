@@ -1,0 +1,911 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+    <changeSet author="vikram@cell-life.org" id="1">
+        <createTable tableName="campaign">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="duration" type="INT"/>
+            <column defaultValue="" name="name" type="VARCHAR(35)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="startDate" type="DATETIME"/>
+            <column defaultValue="" name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="timesPerDay" type="INT"/>
+            <column defaultValue="" name="type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="org_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="2">
+        <createTable tableName="campaigncontact">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="reserveRef" type="BIGINT"/>
+            <column name="currentday" type="INT"/>
+            <column name="joinedDate" type="DATE"/>
+            <column name="mobileNetwork" type="VARCHAR(20)"/>
+            <column defaultValue="" name="msisdn" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="campaign_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contact_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="3">
+        <createTable tableName="campaignmessage">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="message" type="LONGTEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="msgdate" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="msgSlot" type="INT"/>
+            <column name="msgtime" type="TIME"/>
+            <column name="campaign_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="4">
+        <createTable tableName="channel">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="handler" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="name" type="VARCHAR(35)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shortcode" type="INT"/>
+            <column defaultValue="" name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="type" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="5">
+        <createTable tableName="clientalert">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="datetime" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="msg" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="6">
+        <createTable tableName="clienttransaction">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="cost" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="createdby" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="createdfor" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="datetime" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="message" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reservedused" type="DOUBLE"/>
+            <column name="organization_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="7">
+        <createTable tableName="contact">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="firstname" type="VARCHAR(35)"/>
+            <column name="lastname" type="VARCHAR(35)"/>
+            <column name="mobilenetwork" type="VARCHAR(10)"/>
+            <column defaultValue="" name="msisdn" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="organization_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="8">
+        <createTable tableName="contact_contactgroup">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="contact_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contactGroup_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="9">
+        <createTable tableName="contactgroup">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="groupdescription" type="VARCHAR(255)"/>
+            <column defaultValue="" name="groupname" type="VARCHAR(35)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="org_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="10">
+        <createTable tableName="contactmsgtime">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="msgSlot" type="INT"/>
+            <column name="msgTime" type="TIME"/>
+            <column name="campaign_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="campcontact_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="11">
+        <createTable tableName="organization">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="balance" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contactdetails" type="VARCHAR(255)"/>
+            <column defaultValue="" name="name" type="VARCHAR(35)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="12">
+        <createTable tableName="organization_channel">
+            <column name="organization_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="channel_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="13">
+        <createTable tableName="QRTZ_BLOB_TRIGGERS">
+            <column name="TRIGGER_NAME" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TRIGGER_GROUP" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BLOB_DATA" type="BLOB"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="14">
+        <createTable tableName="QRTZ_CALENDARS">
+            <column name="CALENDAR_NAME" type="VARCHAR(200)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="CALENDAR" type="BLOB">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="15">
+        <createTable tableName="QRTZ_CRON_TRIGGERS">
+            <column name="TRIGGER_NAME" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TRIGGER_GROUP" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CRON_EXPRESSION" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TIME_ZONE_ID" type="VARCHAR(80)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="16">
+        <createTable tableName="QRTZ_FIRED_TRIGGERS">
+            <column name="ENTRY_ID" type="VARCHAR(95)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="TRIGGER_NAME" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TRIGGER_GROUP" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IS_VOLATILE" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="INSTANCE_NAME" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FIRED_TIME" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRIORITY" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STATE" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="JOB_NAME" type="VARCHAR(200)"/>
+            <column name="JOB_GROUP" type="VARCHAR(200)"/>
+            <column name="IS_STATEFUL" type="VARCHAR(1)"/>
+            <column name="REQUESTS_RECOVERY" type="VARCHAR(1)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="17">
+        <createTable tableName="QRTZ_JOB_DETAILS">
+            <column name="JOB_NAME" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="JOB_GROUP" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(250)"/>
+            <column name="JOB_CLASS_NAME" type="VARCHAR(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IS_DURABLE" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IS_VOLATILE" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IS_STATEFUL" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="REQUESTS_RECOVERY" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="JOB_DATA" type="BLOB"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="18">
+        <createTable tableName="QRTZ_JOB_LISTENERS">
+            <column name="JOB_NAME" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="JOB_GROUP" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="JOB_LISTENER" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="19">
+        <createTable tableName="QRTZ_LOCKS">
+            <column name="LOCK_NAME" type="VARCHAR(40)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="20">
+        <createTable tableName="QRTZ_PAUSED_TRIGGER_GRPS">
+            <column name="TRIGGER_GROUP" type="VARCHAR(200)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="21">
+        <createTable tableName="QRTZ_SCHEDULER_STATE">
+            <column name="INSTANCE_NAME" type="VARCHAR(200)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="LAST_CHECKIN_TIME" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CHECKIN_INTERVAL" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="22">
+        <createTable tableName="QRTZ_SIMPLE_TRIGGERS">
+            <column name="TRIGGER_NAME" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TRIGGER_GROUP" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="REPEAT_COUNT" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="REPEAT_INTERVAL" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TIMES_TRIGGERED" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="23">
+        <createTable tableName="QRTZ_TRIGGER_LISTENERS">
+            <column name="TRIGGER_NAME" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TRIGGER_GROUP" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TRIGGER_LISTENER" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="24">
+        <createTable tableName="QRTZ_TRIGGERS">
+            <column name="TRIGGER_NAME" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TRIGGER_GROUP" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="JOB_NAME" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="JOB_GROUP" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IS_VOLATILE" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(250)"/>
+            <column name="NEXT_FIRE_TIME" type="BIGINT"/>
+            <column name="PREV_FIRE_TIME" type="BIGINT"/>
+            <column name="PRIORITY" type="INT"/>
+            <column name="TRIGGER_STATE" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TRIGGER_TYPE" type="VARCHAR(8)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="START_TIME" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="END_TIME" type="BIGINT"/>
+            <column name="CALENDAR_NAME" type="VARCHAR(200)"/>
+            <column name="MISFIRE_INSTR" type="SMALLINT"/>
+            <column name="JOB_DATA" type="BLOB"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="25">
+        <createTable tableName="role">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="name" type="VARCHAR(35)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="perimssions" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="26">
+        <createTable tableName="setting">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column defaultValue="" name="name" type="VARCHAR(35)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="type" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valueString" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="27">
+        <createTable tableName="smslog">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="attempts" type="INT"/>
+            <column defaultValue="" name="createdfor" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="datetime" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="dir" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="failreason" type="VARCHAR(100)"/>
+            <column name="message" type="LONGTEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mobilenetwork" type="VARCHAR(10)"/>
+            <column defaultValue="" name="msisdn" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wasp_mt" type="VARCHAR(30)"/>
+            <column defaultValue="" name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trackingnumber" type="VARCHAR(50)"/>
+            <column name="waspstatus" type="VARCHAR(20)"/>
+            <column name="inchannel_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="28">
+        <createTable tableName="smstrigger">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="props" type="VARCHAR(255)"/>
+            <column defaultValue="" name="type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="inchannel_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="29">
+        <createTable tableName="smstriggerhandler">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="props" type="VARCHAR(255)"/>
+            <column name="version" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="smstrigger_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="30">
+        <createTable tableName="user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="emailaddress" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="firstname" type="VARCHAR(35)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastname" type="VARCHAR(35)"/>
+            <column defaultValue="" name="msisdn" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="salt" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="username" type="VARCHAR(35)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="organization_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="31">
+        <createTable tableName="user_role">
+            <column name="user_Id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_Id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="32">
+        <addPrimaryKey columnNames="TRIGGER_NAME, TRIGGER_GROUP" tableName="QRTZ_BLOB_TRIGGERS"/>
+        <addPrimaryKey columnNames="TRIGGER_NAME, TRIGGER_GROUP" tableName="QRTZ_CRON_TRIGGERS"/>
+        <addPrimaryKey columnNames="JOB_NAME, JOB_GROUP" tableName="QRTZ_JOB_DETAILS"/>
+        <addPrimaryKey columnNames="JOB_NAME, JOB_GROUP, JOB_LISTENER" tableName="QRTZ_JOB_LISTENERS"/>
+        <addPrimaryKey columnNames="TRIGGER_NAME, TRIGGER_GROUP" tableName="QRTZ_SIMPLE_TRIGGERS"/>
+        <addPrimaryKey columnNames="TRIGGER_NAME, TRIGGER_GROUP" tableName="QRTZ_TRIGGERS"/>
+        <addPrimaryKey columnNames="TRIGGER_NAME, TRIGGER_GROUP, TRIGGER_LISTENER" tableName="QRTZ_TRIGGER_LISTENERS"/>
+        <createIndex indexName="JOB_NAME" tableName="QRTZ_TRIGGERS" unique="false">
+            <column name="JOB_NAME"/>
+            <column name="JOB_GROUP"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="33">
+        <createIndex indexName="CAMPAIGN_NAME" tableName="campaign" unique="false">
+            <column name="name"/>
+        </createIndex>
+		<createIndex indexName="CAMPAIGN_STATUS" tableName="campaign" unique="false">
+            <column name="status"/>
+        </createIndex>
+		<createIndex indexName="CAMPAIGN_TYPE" tableName="campaign" unique="false">
+            <column name="type"/>
+        </createIndex>
+		<createIndex indexName="fk_campaign_org" tableName="campaign" unique="false">
+            <column name="org_id"/>
+        </createIndex>
+		<createIndex indexName="name" tableName="campaign" unique="true">
+            <column name="name"/>
+        </createIndex>
+		<createIndex indexName="org_id" tableName="campaign" unique="true">
+            <column name="org_id"/>
+            <column name="name"/>
+        </createIndex>
+	</changeSet>
+	<changeSet author="vikram@cell-life.org" id="34">
+		<createIndex indexName="CAMPCONTACT_DAYS" tableName="campaigncontact" unique="false">
+            <column name="currentday"/>
+        </createIndex>
+		<createIndex indexName="CAMPCONTACT_JOINDATE" tableName="campaigncontact" unique="false">
+            <column name="joinedDate"/>
+        </createIndex>
+		<createIndex indexName="CAMPCONTACT_MSISDN" tableName="campaigncontact" unique="false">
+            <column name="msisdn"/>
+        </createIndex>
+		<createIndex indexName="campaign_id" tableName="campaigncontact" unique="true">
+            <column name="campaign_id"/>
+            <column name="msisdn"/>
+        </createIndex>
+		<createIndex indexName="fk_campaign_campaigncontact" tableName="campaigncontact" unique="false">
+            <column name="campaign_id"/>
+        </createIndex>
+		<createIndex indexName="fk_campaigncontact_contact" tableName="campaigncontact" unique="false">
+            <column name="contact_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="35">
+        <createIndex indexName="CAMPAIGN_MSGDATE" tableName="campaignmessage" unique="false">
+            <column name="msgdate"/>
+        </createIndex>
+		<createIndex indexName="CAMPAIGN_MSGTIME" tableName="campaignmessage" unique="false">
+            <column name="msgtime"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="36">
+        <createIndex indexName="fk_campaign_campaignmessage" tableName="campaignmessage" unique="false">
+            <column name="campaign_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="37">
+        <createIndex indexName="CHANNEL_HANDLER" tableName="channel" unique="false">
+            <column name="handler"/>
+        </createIndex>
+		<createIndex indexName="CHANNEL_NAME" tableName="channel" unique="false">
+            <column name="name"/>
+            <column name="type"/>
+        </createIndex>
+		<createIndex indexName="CHANNEL_SHORTCODE" tableName="channel" unique="false">
+            <column name="shortcode"/>
+        </createIndex>
+		<createIndex indexName="CHANNEL_STATUS" tableName="channel" unique="false">
+            <column name="status"/>
+        </createIndex>
+		<createIndex indexName="name" tableName="channel" unique="true">
+            <column name="name"/>
+        </createIndex>
+		<createIndex indexName="shortcode" tableName="channel" unique="true">
+            <column name="shortcode"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="38">
+        <createIndex indexName="ALERT_DATETIME" tableName="clientalert" unique="false">
+            <column name="datetime"/>
+        </createIndex>
+		<createIndex indexName="ALERT_TYPE" tableName="clientalert" unique="false">
+            <column name="type"/>
+        </createIndex>
+		<createIndex indexName="fk_clientalert_user" tableName="clientalert" unique="false">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="39">
+        <createIndex indexName="TRANSACTION_CREATEDFOR" tableName="clienttransaction" unique="false">
+            <column name="createdfor"/>
+        </createIndex>
+		<createIndex indexName="TRANSACTION_DATETIME" tableName="clienttransaction" unique="false">
+            <column name="datetime"/>
+        </createIndex>
+		<createIndex indexName="fk_clienttransaction_organization" tableName="clienttransaction" unique="false">
+            <column name="organization_id"/>
+        </createIndex>
+		<createIndex indexName="fk_clienttransaction_user" tableName="clienttransaction" unique="false">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="40">
+        <createIndex indexName="CONTACT_MSISDN" tableName="contact" unique="false">
+            <column name="msisdn"/>
+        </createIndex>
+		<createIndex indexName="CONTACT_NETWORK" tableName="contact" unique="false">
+            <column name="mobilenetwork"/>
+        </createIndex>
+		<createIndex indexName="fk_organization_contact" tableName="contact" unique="false">
+            <column name="organization_id"/>
+        </createIndex>
+		<createIndex indexName="msisdn" tableName="contact" unique="true">
+            <column name="msisdn"/>
+            <column name="organization_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="41">
+        <createIndex indexName="contact_id" tableName="contact_contactgroup" unique="true">
+            <column name="contact_id"/>
+            <column name="contactGroup_id"/>
+        </createIndex>
+		<createIndex indexName="fk_contact_contactgroup" tableName="contact_contactgroup" unique="false">
+            <column name="contact_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="42">
+        <createIndex indexName="GROUP_NAME" tableName="contactgroup" unique="false">
+            <column name="groupname"/>
+        </createIndex>
+		<createIndex indexName="fk_organization_contactgroup" tableName="contactgroup" unique="false">
+            <column name="org_id"/>
+        </createIndex>
+		<createIndex indexName="org_id" tableName="contactgroup" unique="true">
+            <column name="org_id"/>
+            <column name="groupname"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="43">
+        <createIndex indexName="CAMPCONTACT_TIME" tableName="contactmsgtime" unique="false">
+            <column name="msgTime"/>
+        </createIndex>
+		<createIndex indexName="fk_campaign_contactmsgtime" tableName="contactmsgtime" unique="false">
+            <column name="campaign_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="44">
+        <createIndex indexName="name" tableName="organization" unique="true">
+            <column name="name"/>
+        </createIndex>
+		<createIndex indexName="fk_channel_organization" tableName="organization_channel" unique="false">
+            <column name="channel_id"/>
+        </createIndex>
+		<createIndex indexName="fk_organization_channel" tableName="organization_channel" unique="false">
+            <column name="organization_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="45">
+        <createIndex indexName="name" tableName="role" unique="true">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="46">
+        <createIndex indexName="SETTING_NAME" tableName="setting" unique="false">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="47">
+        <createIndex indexName="FKCA733B4BE8695D01" tableName="smslog" unique="false">
+            <column name="user_id"/>
+        </createIndex>
+		<createIndex indexName="SMSLOG_CREATEDFOR" tableName="smslog" unique="false">
+            <column name="createdfor"/>
+        </createIndex>
+		<createIndex indexName="SMSLOG_DATETIME" tableName="smslog" unique="false">
+            <column name="datetime"/>
+        </createIndex>
+		<createIndex indexName="SMSLOG_DIR" tableName="smslog" unique="false">
+            <column name="dir"/>
+        </createIndex>
+		<createIndex indexName="SMSLOG_MSISDN" tableName="smslog" unique="false">
+            <column name="msisdn"/>
+        </createIndex>
+		<createIndex indexName="SMSLOG_NETWORK" tableName="smslog" unique="false">
+            <column name="mobilenetwork"/>
+        </createIndex>
+		<createIndex indexName="SMSLOG_STATUS" tableName="smslog" unique="false">
+            <column name="status"/>
+        </createIndex>
+		<createIndex indexName="SMSLOG_TRACKINGNUM" tableName="smslog" unique="false">
+            <column name="trackingnumber"/>
+        </createIndex>
+		<createIndex indexName="fk_channel_smslog_in" tableName="smslog" unique="false">
+            <column name="inchannel_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="48">
+        <createIndex indexName="SMSTRIG_TRIGTYPE" tableName="smstrigger" unique="false">
+            <column name="type"/>
+        </createIndex>
+		<createIndex indexName="fk_channel_trigger_in" tableName="smstrigger" unique="false">
+            <column name="inchannel_id"/>
+        </createIndex>
+		<createIndex indexName="fk_smstrigger_user" tableName="smstrigger" unique="false">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="49">
+        <createIndex indexName="USER_EMAIL" tableName="user" unique="false">
+            <column name="emailaddress"/>
+        </createIndex>
+		<createIndex indexName="USER_FNAME" tableName="user" unique="false">
+            <column name="firstname"/>
+        </createIndex>
+		<createIndex indexName="USER_LNAME" tableName="user" unique="false">
+            <column name="lastname"/>
+        </createIndex>
+		<createIndex indexName="USER_MSISDN" tableName="user" unique="false">
+            <column name="msisdn"/>
+        </createIndex>
+		<createIndex indexName="USER_PWD" tableName="user" unique="false">
+            <column name="password"/>
+        </createIndex>
+		<createIndex indexName="USER_USERNAME" tableName="user" unique="false">
+            <column name="username"/>
+        </createIndex>
+		<createIndex indexName="fk_organization_user" tableName="user" unique="false">
+            <column name="organization_id"/>
+        </createIndex>
+		<createIndex indexName="username" tableName="user" unique="true">
+            <column name="username"/>
+        </createIndex>
+		<createIndex indexName="fk_user_role" tableName="user_role" unique="false">
+            <column name="user_Id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="vikram@cell-life.org" id="50">
+        <addForeignKeyConstraint baseColumnNames="contact_id" baseTableName="contact_contactgroup" constraintName="fk_contact_contactgroup" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="contact"/>
+		<addForeignKeyConstraint baseColumnNames="contactGroup_id" baseTableName="contact_contactgroup" constraintName="fk_contactgroup_contact" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="contactgroup"/>
+		<addForeignKeyConstraint baseColumnNames="campaign_id" baseTableName="contactmsgtime" constraintName="fk_campaign_contactmsgtime" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="campaign"/>
+		<addForeignKeyConstraint baseColumnNames="campcontact_id" baseTableName="contactmsgtime" constraintName="fk_campaigncontact_contactmsgtime" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="campaigncontact"/>
+		<addForeignKeyConstraint baseColumnNames="inchannel_id" baseTableName="smstrigger" constraintName="fk_channel_trigger_in" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="channel"/>
+		<addForeignKeyConstraint baseColumnNames="smstrigger_id" baseTableName="smstriggerhandler" constraintName="fk_smstriggerhandler_smstrigger" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="smstrigger"/>
+		<addForeignKeyConstraint baseColumnNames="organization_id" baseTableName="user" constraintName="fk_organization_user" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="organization"/>
+		<addForeignKeyConstraint baseColumnNames="role_Id" baseTableName="user_role" constraintName="fk_role_user" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="role"/>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="51">
+		<insert tableName="QRTZ_LOCKS">
+			<column name="LOCK_NAME" value="TRIGGER_ACCESS" />
+		</insert>
+		<insert tableName="QRTZ_LOCKS">
+			<column name="LOCK_NAME" value="JOB_ACCESS" />
+		</insert>
+		<insert tableName="QRTZ_LOCKS">
+			<column name="LOCK_NAME" value="CALENDAR_ACCESS" />
+		</insert>
+		<insert tableName="QRTZ_LOCKS">
+			<column name="LOCK_NAME" value="STATE_ACCESS" />
+		</insert>
+		<insert tableName="QRTZ_LOCKS">
+			<column name="LOCK_NAME" value="MISFIRE_ACCESS" />
+		</insert>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="52">
+		<comment>defalut organization and admin user: username 'admin', password 'admin'</comment>
+		<insert tableName="organization">
+			<column name="id" valueNumeric="1"/>
+			<column name="balance" valueNumeric="100"/>
+			<column name="name" value="Demo Organization"/>
+		</insert>
+		<insert tableName="user">
+			<column name="id" valueNumeric="1" />
+			<column name="emailaddress" value="admin@admin.com" />
+			<column name="firstname" value="admin" />
+			<column name="lastname" value="admin" />
+			<column name="msisdn" value="27555555555" />
+			<column name="username" value="admin" />
+			<column name="organization_id" value="1" />
+			<column name="password" value="79d0133d7b51919ebf17569b6d317909c3268c3b" />
+			<column name="salt" value="06fa5271a48192a32f9b1050f6e91f7149d1045b" />
+	</insert>
+	</changeSet>
+	<changeSet author="vikram@cell-life.org" id="53">
+		<insert tableName="channel">
+		<column name="id" valueNumeric="1"/>
+		<column name="handler" value="Integrat"/>
+		<column name="name" value="Default Active Channel"/>
+		<column name="type" value="OUT"/>
+		<column name="shortcode" valueNumeric="0"/>
+		<column name="status" value="ACTIVE"/>
+	</insert>
+	</changeSet>
+	<changeSet author="vikram@cell-life.org" id="54">
+		<insert tableName="clienttransaction">
+		<column name="id" valueNumeric="1"/>
+		<column name="cost" valueNumeric="100"/>
+		<column name="datetime" valueDate="2010-10-18"/>
+		<column name="message" value="initial allocated"/>
+		<column name="createdfor" value="ORG id: 1"/>
+		<column name="organization_id" valueNumeric="1"/>
+		<column name="user_id" valueNumeric="1"/>
+		<column name="createdby" value="User: 1" />
+		<column name="reservedused" valueNumeric="0"/>
+		</insert>
+	</changeSet>
+	<changeSet author="vikram@cell-life.org" id="55">
+		<insert tableName="role">
+		<column name="id" valueNumeric="1"/>
+		<column name="name" value="ADMINISTRATOR"/>
+		<column name="perimssions" value="ROLE_ADMIN"/>
+		</insert>
+	</changeSet>
+	<changeSet author="vikram@cell-life.org" id="56">
+		<insert tableName="user_role">
+		<column name="role_Id" valueNumeric="1"/>
+		<column name="user_Id" valueNumeric="1"/>
+		</insert>
+	</changeSet>
+	<changeSet author="vikram@cell-life.org" id="57">
+		<addColumn tableName="campaign">
+			<column name="sendNow" type="BOOLEAN" valueBoolean="false"/>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="58">
+		<insert tableName="setting">
+			<column name="id" valueNumeric="0" />
+			<column name="description"
+				value="Threshold for sending a client alert when their balance is low" />
+			<column name="name" value="client.balance.warning.threshold" />
+			<column name="type" value="java.lang.String" />
+			<column name="valueString" value="20" />
+		</insert>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="59">
+		<validCheckSum>fde091e6441deccc7d378c3d36b1edad</validCheckSum>
+		<update tableName="setting">
+			<column name="type" value="java.lang.Integer"/>
+			<where>name='client.balance.warning.threshold'</where>
+		</update>
+	</changeSet>
+</databaseChangeLog>

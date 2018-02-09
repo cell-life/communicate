@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+	<changeSet author="simon@cell-life.org" id="2.6.1">
+		<comment>add invalid columns to contact and campaigncontact</comment>
+		<addColumn tableName="contact">
+			<column name="invalid" type="BOOLEAN" defaultValueBoolean="false">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+		<addColumn tableName="campaigncontact">
+			<column name="invalid" type="BOOLEAN" defaultValueBoolean="false">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.6.2">
+		<comment>re-factor numberinfo: change names, add channel_id column</comment>
+		<renameColumn tableName="numberinfo" oldColumnName="country"
+			newColumnName="name" columnDataType="VARCHAR(100)" />
+		<renameColumn tableName="numberinfo" oldColumnName="country_code"
+			newColumnName="prefix" columnDataType="VARCHAR(4)" />
+		<modifyColumn tableName="numberinfo">
+			<column name="prefix" type="VARCHAR(10)">
+				<constraints unique="true" nullable="false" />
+			</column>
+		</modifyColumn>
+		<addColumn tableName="numberinfo">
+			<column name="channel_id" type="BIGINT" />
+		</addColumn>
+		<sql><![CDATA[
+			update numberinfo set channel_id = 
+			(select id from channel where type = 'OUT' and voided = false)
+		]]></sql>
+		<addNotNullConstraint tableName="numberinfo"
+			columnName="name" columnDataType="VARCHAR(100)" />
+		<addUniqueConstraint tableName="numberinfo"
+			constraintName="unique_numberinfo_name" columnNames="name" />
+		<addNotNullConstraint tableName="numberinfo"
+			columnName="channel_id" columnDataType="BIGINT" />
+		<addForeignKeyConstraint constraintName="fk_numberinfo_channel"
+			baseTableName="numberinfo" baseColumnNames="channel_id"
+			referencedTableName="channel" referencedColumnNames="id" />
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="2.6.3">
+	 	<comment>remove unique constraint on numberinfo.validator</comment>
+	 	<dropUniqueConstraint tableName="numberinfo" constraintName="validator"
+	 		uniqueColumns="validator"/>
+	</changeSet>
+</databaseChangeLog>

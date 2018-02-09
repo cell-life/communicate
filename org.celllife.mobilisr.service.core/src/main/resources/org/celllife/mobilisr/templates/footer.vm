@@ -1,0 +1,18 @@
+<p align="right"><font size="2"><a href="http://communicate.cell-life.org" target="_blank">Login to Communicate</a></font></p>
+</td>
+</tr>
+<tr>
+<td colspan="3"><img src="http://www.cell-life.org/images/stories/email_footer.png" border="0" alt="footer" width="600" height="100" /></td>
+</tr>
+</tbody>
+</table>
+<p><font size="2" color="gray">
+Please do not reply to this email. Should you have any queries regarding this notification please send an email to ${userRequestEmail}.<br/><br/>
+For information about Communicate visit <a href="http://www.cell-life.org/communicate" target="_blank">http://www.cell-life.org/communicate</a><br/><br/>
+</font></p>
+</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

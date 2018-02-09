@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:stream="http://www.springframework.org/schema/integration/stream"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:jms="http://www.springframework.org/schema/integration/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/task 
+			http://www.springframework.org/schema/task/spring-task.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context.xsd
+			http://www.springframework.org/schema/integration
+			http://www.springframework.org/schema/integration/spring-integration.xsd
+			http://www.springframework.org/schema/integration/jms
+			http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd
+			http://www.springframework.org/schema/integration/stream
+			http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd">
+
+<!--
+====================================================================================
+                               Outgoing message flow
+====================================================================================
+
+                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                             MessageChannel.sendMessage(SmsMt)
+                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                             |
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~            |
+        MessageService.sendMessage(SmsBatchConfig)           |individualMessageChannel
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~            |
+                          |                                  |
+                          |bulkMessageChannel            ~~~~~~~~~~~~~~~
+                          |                              header-enricher
+                     ~~~~~~~~~~~~~~~                     ~~~~~~~~~~~~~~~
+                     MessageSplitter                         |
+                     ~~~~~~~~~~~~~~~                        /
+                           \__________________  ___________/
+                                              \/
+                                              |
+                                              |correlatedMessageChannel
+                                              |
+                                 	   ~~~~~~~~~~~~~~~
+                                       ChannelSelector
+                                 	   ~~~~~~~~~~~~~~~
+                                              |
+                                              |messagesWithChannel
+                                              |
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 OutgoingMessagePreProcessor
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                              |
+                                              |preProcessedMessages
+                                              |
+                                            ~~~~~~
+                                            router
+                                            ~~~~~~
+                                              |
+                                 _____________|_____________
+                                /             |             \
+                               |              |             |
+                     telfreeSmp|          genericSmpp       |integratOutChannel
+                               |              |             |
+                            ~~~~~~~        ~~~~~~~~     ~~~~~~~~
+                            Telfree          AAT        Integrat
+                            ~~~~~~~        ~~~~~~~~     ~~~~~~~~
+                               \                           /
+                               \__________________________/
+                                              \|/
+                                               |
+                          _____________________|individualMessageResponse
+                         /                     |
+     postProcessMessages/              ~~~~~~~~~~~~~~~~~
+                       /               MessageAggregator
+                      |                ~~~~~~~~~~~~~~~~~
+            ~~~~~~~~~~~~~~~~~~~~               |
+            MessagePostProcessor               |batchResponse
+            ~~~~~~~~~~~~~~~~~~~~               |
+                                        ~~~~~~~~~~~~~~~
+                                        BatchAggregator
+                                        ~~~~~~~~~~~~~~~
+                                               |
+                                               |batchStats
+                                               |
+                                      ~~~~~~~~~~~~~~~~~~~
+                                      BatchStatsProcessor
+                                      ~~~~~~~~~~~~~~~~~~~
+ -->
+	<channel id="bulkMessageChannel" />
+
+	<channel id="individualMessageChannel"/>
+
+	<header-enricher input-channel="individualMessageChannel" output-channel="correlatedMessageChannel">
+		<header name="sequenceNumber" value="0" type="java.lang.Integer"/>
+		<header name="sequenceSize" value="1" type="java.lang.Integer"/>
+	</header-enricher>
+
+	<channel id="correlatedMessageChannel">
+		<dispatcher task-executor="messageOutTaskExecutor"/>
+	</channel>
+
+	<channel id="messagesWithChannel" />
+	<channel id="preProcessedMessages" />
+
+	<router input-channel="preProcessedMessages" expression="payload.channelName"/>
+
+	<!--
+	===============================================================================
+						   Outgoing WASP channels
+	===============================================================================
+		Changes to these names must also be done
+		in the relevant channel handler
+		see org.celllife.mobilisr.service.wasp.ChannelHandler
+		-->
+	<!--
+		see org.celllife.mobilisr.service.wasp.TelfreeHttpOutHandler 
+	 -->
+	<channel id="out-telfreeHttp"/>
+
+	<!--
+		see org.celllife.mobilisr.service.wasp.TelfreeSmppHandler 
+	 -->
+	<!-- can send and receive -->
+	<channel id="telfreeSmpp"/>
+
+	<!--
+		see org.celllife.mobilisr.service.wasp.IntegratOutHttpHandler 
+	 -->
+	<channel id="out-integratHttp"/>
+
+	<!--
+		see org.celllife.mobilisr.service.wasp.IntegratSmppHandler
+	 -->
+	<!-- can send and receive -->
+	<channel id="integratSmpp"/>
+
+
+    <!--
+        see org.celllife.mobilisr.service.wasp.GenericSmppHandlerdler
+     -->
+    <!-- can send and receive -->
+    <channel id="genericSmpp"/>
+
+	<!--
+		see org.celllife.mobilisr.service.message.processors.OutgoingMessagePreProcessor
+		see org.celllife.mobilisr.service.wasp.SimWasp
+	 -->
+	<channel id="out-simulator"/>
+
+	<!--=============================================================================-->
+
+	<channel id="individualMessageResponse">
+		<interceptors>
+			<wire-tap channel="postProcessMessages"/>
+		</interceptors>
+	</channel>
+	<channel id="batchResponse"/>
+	<channel id="postProcessMessages" />
+	<channel id="batchStats" />
+
+	<exception-type-router input-channel="errorChannel" default-output-channel="genericErrorChannel">
+		<mapping exception-type="org.springframework.integration.support.channel.ChannelResolutionException"
+			channel="illegalChannel"/>
+	</exception-type-router>
+
+	<channel id="illegalChannel"/>
+
+	<beans:bean id="messageOutTaskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<beans:property name="corePoolSize" value="10" />
+		<beans:property name="maxPoolSize" value="250" />
+		<beans:property name="keepAliveSeconds" value="60" />
+<!--		<beans:property name="queueCapacity" value="2000" />-->
+		<beans:property name="rejectedExecutionHandler">
+			<beans:bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy" />
+		</beans:property>
+	</beans:bean>
+
+</beans:beans>

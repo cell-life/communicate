@@ -1,0 +1,8 @@
+#**
+This is the template for testing
+
+Variables that may be used are:
+ - hostname
+ - organization : the organization
+*#
+${organization.getName()}:${organization.getAvailableBalance()}

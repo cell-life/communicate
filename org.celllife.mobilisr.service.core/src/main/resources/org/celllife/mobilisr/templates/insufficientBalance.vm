@@ -1,0 +1,30 @@
+#**
+This is the template for client alerts that occur as a result of the user
+requesting an action that can not be performed due to insufficient 
+credits in the organiztion's account.
+
+Variables that may be used are:
+ - hostname
+ - action : a message describing the action that was requested
+ - organization : the organization
+ - requestedAmount : the amount requested by the action
+ - userRequestEmail : the value of the setting "User request email address"
+ 
+Velocity generic tools also available. See http://velocity.apache.org/tools/devel/generic/
+*#
+#parse("org/celllife/mobilisr/templates/header.vm")	
+<h3>Insufficient credit alert</h3>
+<p>Unable to perform action for <b>${organization.getName()}</b> due to insufficient account balance:</p>
+
+<p><b>Requested action:</b>
+<br/>${action}</p>
+
+<p>
+<ul>
+<li>Current account balance: ${organization.getAvailableBalance()} credits</li>
+<li>Amount requested for action: ${requestedAmount}</li>
+</ul>
+</p>
+
+<p>To load more credits to your account please send an email to <a href="mailto:${userRequestEmail}?subject=Communicate credit purchase">${userRequestEmail}</a></p>
+#parse("org/celllife/mobilisr/templates/footer.vm")	

@@ -1,0 +1,2 @@
+serviceClass: org.celllife.mobilisr.service.gwt.ScheduleService
+path: 8459CB8CE67F606FF26674AB6F5FA18B.gwt.rpc

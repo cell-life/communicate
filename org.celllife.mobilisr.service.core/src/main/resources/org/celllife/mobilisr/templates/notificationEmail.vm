@@ -1,0 +1,24 @@
+#**
+This is the template for notifications sent via the Communicate admin interface
+
+Variables that may be used are:
+ - notificationText
+ - contactName
+ - organisationName
+ - organization : the organization
+ - userRequestEmail : the value of the setting "User request email address"
+ 
+Velocity generic tools also available. See http://velocity.apache.org/tools/devel/generic/
+*#
+#parse("org/celllife/mobilisr/templates/header.vm")	
+Dear ${contactName}<br/><br/>
+
+${notificationText}<br/><br/>
+
+Best regards<br/>
+Cell-Life<br/><br/>
+
+<p><font size="2">
+You are receiving this email because your email address is the contact email address for the organisation '${organisationName}' or because you are a Communicate user belonging to the organisation '${organisationName}'.<br/><br/>
+</font></p>
+#parse("org/celllife/mobilisr/templates/footer.vm")	

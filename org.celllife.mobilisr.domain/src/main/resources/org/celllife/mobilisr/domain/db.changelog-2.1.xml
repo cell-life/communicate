@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+	<changeSet author="vikram@cell-life.org" id="60">
+		<addColumn tableName="campaign">
+			<column name="endDate" type="DATETIME"/>
+			<column name="welcomemessage" type="LONGTEXT"/>
+		</addColumn>
+	</changeSet>
+	<changeSet author="vikram@cell-life.org" id="61">
+		<addColumn tableName="campaign">
+			<column name="cost" type="DOUBLE"/>
+		</addColumn>
+	</changeSet>	
+	<changeSet author="munaf@cell-life.org" id="62">
+		<addColumn tableName="campaignmessage">
+			<column name="msgDay" type="INT"/>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="63">
+		<addUniqueConstraint tableName="user" columnNames="emailaddress"
+			constraintName="unique_email" />
+	</changeSet>	
+	<changeSet author="simon@cell-life.org" id="64">
+		<addColumn tableName="organization">
+			<column name="reserved" type="double" defaultValue="0">
+				<constraints nullable="false"/>
+			</column>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="65">
+		<comment>Changed org balance type from double to int</comment>
+		<modifyColumn tableName="organization">
+			<column name="balance" type="int" defaultValue="0"/>
+			<column name="reserved" type="int" defaultValue="0"/>
+		</modifyColumn>
+		<modifyColumn tableName="campaign">
+			<column name="cost" type="int" defaultValue="0"/>
+		</modifyColumn>
+		<modifyColumn tableName="clienttransaction">
+			<column name="cost" type="int" defaultValue="0"/>
+			<column name="reservedused" type="int" defaultValue="0"/>
+		</modifyColumn>
+	</changeSet>	
+		<changeSet author="simon@cell-life.org" id="66">
+		<comment>Add receivedWelcome column to campaigncontact</comment>
+		<addColumn tableName="campaigncontact">
+			<column name="receivedwelcome" defaultValueBoolean="false" type="boolean"/>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="67">
+		<sql>update QRTZ_JOB_DETAILS set JOB_CLASS_NAME =
+			"org.celllife.mobilisr.service.qrtz.beans.RelativeCampJobRunner" where
+			IS_DURABLE = 1</sql>
+		<sql>update QRTZ_JOB_DETAILS set JOB_CLASS_NAME =
+			"org.celllife.mobilisr.service.qrtz.beans.FixedCampJobRunner" where
+			IS_DURABLE = 0</sql>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="68">
+		<comment>increase length of campaign name column</comment>
+		<modifyColumn tableName="campaign">
+			<column defaultValue="" name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+		</modifyColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="69">
+		<comment>add campaign mail recipient to settings table</comment>
+		<insert tableName="setting">
+			<column name="description"
+				value="Email address to send campaing requests to." />
+			<column name="name" value="campaign.request.email.recipient" />
+			<column name="type" value="java.lang.String" />
+			<column name="valueString" value="test@test.com" />
+		</insert>
+	</changeSet>
+	<changeSet author="dave@cell-life.org" id="70">
+		<comment>In table organization, drop column contactdetails and add columns address, 
+			contactname, contactnumber, contactemail.</comment>
+		<dropColumn tableName="organization" columnName="contactdetails"/>
+		<addColumn tableName="organization">
+			<column name="address" type="varchar(255)"/>
+		</addColumn>
+		<addColumn tableName="organization">
+			<column name="contactname" type="varchar(70)"/>
+		</addColumn>
+		<addColumn tableName="organization">
+			<column name="contactnumber" type="varchar(20)"/>
+		</addColumn>
+		<addColumn tableName="organization">
+			<column name="contactemail" type="varchar(255)"/>
+		</addColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="71">
+		<comment>re-create transaction table</comment>
+		<dropTable tableName="clienttransaction" />
+		<createTable tableName="transaction">
+			<column autoIncrement="true" name="id" type="BIGINT">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="cost" type="int" defaultValue="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="reserved" type="int" defaultValue="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="datetime" type="DATETIME">
+				<constraints nullable="false" />
+			</column>
+			<column defaultValue="" name="message" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column defaultValue="" name="createdfor" type="VARCHAR(60)">
+				<constraints nullable="false" />
+			</column>
+			<column defaultValue="" name="createdby" type="VARCHAR(60)">
+				<constraints nullable="false" />
+			</column>
+			<column name="parent_id" type="BIGINT" />
+			<column name="user_id" type="BIGINT">
+				<constraints nullable="true" />
+			</column>
+			<column name="organization_id" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createIndex indexName="TRANSACTION_CREATEDFOR" tableName="transaction" unique="false">
+            <column name="createdfor"/>
+        </createIndex>
+		<createIndex indexName="TRANSACTION_DATETIME" tableName="transaction" unique="false">
+            <column name="datetime"/>
+        </createIndex>
+        <createIndex indexName="fk_transaction_organization" tableName="transaction" unique="false">
+            <column name="organization_id"/>
+        </createIndex>
+		<createIndex indexName="fk_transaction_user" tableName="transaction" unique="false">
+            <column name="user_id"/>
+        </createIndex>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="72">
+		<comment>rename settings</comment>
+		<update tableName="setting">
+			<column name="name" value="Camapign request email address"/>
+			<where>name = 'campaign.request.email.recipient'</where>
+		</update>
+		<update tableName="setting">
+			<column name="name" value="Balance warning threshold"/>
+			<where>name = 'client.balance.warning.threshold'</where>
+		</update>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="73">
+		<comment>add organization_id column to clientalert table, remove
+		not null constraint on user_id column</comment>
+		<addColumn tableName="clientalert">
+			<column name="organization_id" type="bigint" />
+		</addColumn>
+		<sql><![CDATA[
+				update clientalert a set organization_id = (select o.id from 
+				organization o, user u where u.organization_id = o.id and
+				u.id = a.user_id)
+			]]></sql>
+		<addNotNullConstraint tableName="clientalert" columnDataType="bigint"
+			columnName="organization_id" />
+		<dropNotNullConstraint tableName="clientalert" columnDataType="bigint"
+			columnName="user_id" />
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="74">
+		<comment>zero orgnazation balances after transaction re-model</comment>
+		<update tableName="organization">
+			<column name="balance" valueNumeric="0"/>
+			<column name="reserved" valueNumeric="0"/>
+		</update>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="75">
+		<comment>remove user_id from smslog and add organiazation_id</comment>
+		<addColumn tableName="smslog">
+			<column name="organization_id" type="bigint"/>
+		</addColumn>
+		<sql><![CDATA[
+			update smslog s set organization_id = (select o.id from organization o,
+			user u where u.organization_id = o.id and u.id = s.user_id);
+		]]></sql>
+		<dropIndex tableName="smslog" indexName="FKCA733B4BE8695D01"/>
+		<dropColumn tableName="smslog" columnName="user_id"/>
+		<createIndex indexName="idx_smslog_organization_id" tableName="smslog" unique="false">
+            <column name="organization_id"/>
+        </createIndex>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="76">
+		<comment>remove user_id from smstrigger and add organiazation_id</comment>
+		<addColumn tableName="smstrigger">
+			<column name="organization_id" type="bigint"/>
+		</addColumn>
+		<sql><![CDATA[
+			update smstrigger s set organization_id = (select o.id from organization o,
+			user u where u.organization_id = o.id and u.id = s.user_id);
+		]]></sql>
+		<dropIndex tableName="smstrigger" indexName="fk_smstrigger_user"/>
+		<dropColumn tableName="smstrigger" columnName="user_id"/>
+		<createIndex indexName="idx_smstrigger_organization_id" tableName="smstrigger" unique="false">
+            <column name="organization_id"/>
+        </createIndex>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="77">
+		<comment>change setting types to emum</comment>
+		<update tableName="setting">
+			<column name="type" value="EMAIL"/>
+			<where>name = 'Camapign request email address'</where>
+		</update>
+		<update tableName="setting">
+			<column name="type" value="POSITIVE_INTEGER"/>
+			<where>name = 'Balance warning threshold'</where>
+		</update>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="78">
+		<comment>increase size of clientalert.msg column</comment>
+		<modifyColumn tableName="clientalert">
+			<column name="msg" type="VARCHAR(1000)"/>
+		</modifyColumn>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="79">
+		<comment>add emailed column to clientalert</comment>
+		<addColumn tableName="clientalert">
+			<column name="emailed" type="BOOLEAN" defaultValueBoolean="false"/>
+		</addColumn>
+	</changeSet>	
+	<changeSet author="simon@cell-life.org" id="80">
+		<comment>fix spelling mistake in setting name</comment>
+		<update tableName="setting">
+			<column name="name" value="Campaign request email address"/>
+			<where>name = 'Camapign request email address'</where>
+		</update>
+	</changeSet>
+	<changeSet author="simon@cell-life.org" id="81">
+		<comment>change campaigncontact.currentday to progress</comment>
+		<renameColumn tableName="campaigncontact" oldColumnName="currentday"
+			newColumnName="progress" columnDataType="INT"/>
+	</changeSet>
+	<changeSet author="munaf@cell-life.org" id="82">
+		<comment>add lastLoginDate to User</comment>
+		<addColumn tableName="user">
+			<column name="lastlogindate" type="DATETIME"/>
+		</addColumn>
+		<comment>add lastLoginDate to User</comment>
+		<addColumn tableName="organization">
+			<column name="balancethreshold" type="INT"/>
+		</addColumn>
+	</changeSet>
+	<changeSet author="munaf@cell-life.org" id="83">
+		<comment>give balance threshold to organizations</comment>
+		<update tableName="organization">
+			<column name="balancethreshold" value="100"/>
+			<where>balancethreshold is NULL</where>
+		</update>
+	</changeSet>	
+</databaseChangeLog>

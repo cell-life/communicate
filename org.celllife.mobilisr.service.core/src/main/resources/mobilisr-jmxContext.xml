@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+<!--	<context:component-scan base-package="org.springbyexample.jmx" />-->
+
+	<bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+		<property name="locateExistingServerIfPossible" value="true" />
+	</bean>
+
+<!--	<context:mbean-export />-->
+
+	<!--<bean id="registry" class="org.springframework.remoting.rmi.RmiRegistryFactoryBean"
+		p:port="1099" />
+
+	 Expose JMX over RMI 
+	<bean id="serverConnector"
+		class="org.springframework.jmx.support.ConnectorServerFactoryBean"
+		p:objectName="connector:name=rmi"
+		p:serviceUrl="service:jmx:rmi://localhost/jndi/rmi://localhost:1099/myconnector" />
+
+	 Client connector to JMX over RMI 
+	<bean id="clientConnector"
+		class="org.springframework.jmx.support.MBeanServerConnectionFactoryBean"
+		p:serviceUrl="service:jmx:rmi://localhost/jndi/rmi://localhost:1099/myconnector" />
+
+	 Client ServerManager proxy to JMX over RMI 
+	<bean id="serverManagerProxy" class="org.springframework.jmx.access.MBeanProxyFactoryBean"
+		p:objectName="org.springbyexample.jmx:name=ServerManager"
+		p:proxyInterface="org.springbyexample.jmx.ServerManager" p:server-ref="clientConnector" />
+
+-->
+<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
+   	<property name="beans">
+            <map>
+                <entry key="bean:name=backgroundService" value-ref="backgroundService"/>
+            </map>
+        </property>
+    <property name="assembler" ref="assembler"/>
+    <property name="namingStrategy" ref="namingStrategy"/>
+  </bean>
+
+  <bean id="namingStrategy" class="org.springframework.jmx.export.naming.MetadataNamingStrategy">
+    <property name="attributeSource" ref="attributeSource"/>
+  </bean>
+
+  <bean id="attributeSource"
+      class="org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource"/>
+      
+       <bean id="assembler" class="org.springframework.jmx.export.assembler.MetadataMBeanInfoAssembler">
+    <property name="attributeSource" ref="attributeSource"/>
+    </bean>
+</beans>
+ 

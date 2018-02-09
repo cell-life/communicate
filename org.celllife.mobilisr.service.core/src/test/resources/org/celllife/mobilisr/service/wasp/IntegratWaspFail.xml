@@ -1,0 +1,6 @@
+<Response status_code="-1" token="#%#TOK_I1JlZjwwLjAuOC42MzUwNz4=">
+    <Data name="msg_nak">
+        <field name="status" value="258"/>
+        <field name="reason" value="{0}"/>
+    </Data>
+</Response>

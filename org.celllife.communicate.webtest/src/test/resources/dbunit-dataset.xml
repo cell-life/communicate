@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <campaign/>
+  <campaigncontact/>
+  <campaignmessage/>
+  <channel id="7" handler="simOutChannel" name="Simulation outgoing" shortcode="0" type="OUT" voided="false"/>
+  <channel id="8" handler="simInChannel" name="Simulation incoming" shortcode="12345" type="IN" voided="false"/>
+  <channelconfig/>
+  <contact/>
+  <contactgroup/>
+  <contact_contactgroup/>
+  <contactmsgtime/>
+  <messagefilter/>
+  <filteraction/>
+  <mailmessage/>
+  <numberinfo id="3" country="SA" country_code="27" validator="^27[1-9][0-9]{8}$" voided="false"/>
+  <organization id="38" balance="10000" name="Admin organisation" reserved="0" balancethreshold="0" voided="false"/>
+  <organization_channel/>
+  <role id="5" name="ADMINISTRATOR" permissions="ROLE_ADMIN"/>
+  <setting/>
+  <smslog/>
+  <transaction id="8" cost="10000" reserved="0" datetime="2011-11-18 15:50:12.0" message="initial balance" createdfor="test setup" createdby="test setup" user_id="5" organization_id="38"/>
+  <user id="5" emailaddress="admin@mobilisr.org" firstname="admin" lastname="admin" msisdn="27722545698" password="5074d3501fe15f27170ee15e13b7c864130adc9c" salt="170b8223e596c12d314f9fa80cc54f1673791484" username="admin" organization_id="38" voided="false"/>
+  <user_role user_Id="5" role_Id="5"/>
+</dataset>

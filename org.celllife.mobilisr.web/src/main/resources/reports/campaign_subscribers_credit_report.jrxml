@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="campaign_subscriber_credit_report" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	
+	<template><![CDATA[$P{SUBREPORT_DIR} + "report_style_template.jrtx"]]></template>
+	
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="organization" class="java.lang.String"/>
+	<parameter name="campaign_name" class="java.lang.String"/>
+	
+	<queryString>
+		<![CDATA[
+select o.name as 'organization_name', c.name as 'campaign_name', cmplt.completed as 'completed', 
+ active.still_receiving_msgs as 'still_receiving_msgs', credit.credits_required as 'credits_required'
+from campaign c
+ left join organization o on (o.id = c.org_id)
+ left join
+  (select cmpltcc.campaign_id, count(*) as 'completed' from campaigncontact cmpltcc, campaign cmpltc 
+  where cmpltcc.campaign_id = cmpltc.id and cmpltc.duration <= cmpltcc.progress and cmpltcc.endDate is null 
+  group by cmpltcc.campaign_id)
+  as cmplt on (cmplt.campaign_id = c.id)
+ left join
+  (select activecc.campaign_id, count(*) as 'still_receiving_msgs' from campaigncontact activecc, campaign activec 
+  where activecc.campaign_id = activec.id and activecc.progress < activec.duration and activecc.endDate is null 
+  group by activecc.campaign_id)
+  as active on (active.campaign_id = c.id)
+ left join
+   (select credits.id, credits.name, sum(credits.required) as credits_required from 
+     (select creditc.id, creditc.name, (select count(cm.id) from campaignmessage cm where cm.campaign_id = creditc.id and cm.msgDay > creditcc.progress) as required
+      from campaign creditc, campaigncontact creditcc
+      where creditcc.endDate is null and creditcc.campaign_id=creditc.id) as credits
+    group by credits.id, credits.name)
+    as credit on (credit.id = c.id)
+where c.type in ('FLEXI','DAILY')
+	and o.name like $P{organization} and c.name like $P{campaign_name}    
+group by c.name
+order by c.name;
+		]]>
+	</queryString>
+	<field name="organization_name" class="java.lang.String"/>
+	<field name="campaign_name" class="java.lang.String"/>
+	<field name="completed" class="java.lang.Number"/>
+	<field name="still_receiving_msgs" class="java.lang.Number"/>
+	<field name="credits_required" class="java.lang.Number"/>
+	
+	<variable name="sum_completed" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{completed}]]></variableExpression>
+	</variable>
+	<variable name="sum_stillreceivingmsgs" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{still_receiving_msgs}]]></variableExpression>
+	</variable>
+	<variable name="sum_creditsrequired" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{credits_required}]]></variableExpression>
+	</variable>
+	
+	<title>
+		<band height="104" splitType="Stretch">
+			<staticText>
+				<reportElement style="report_title" mode="Transparent" x="1" y="1" width="476" height="46"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Campaign Subscriber Credit Report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="56" width="90" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Organisation:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="92" y="56" width="210" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{organization}.equals( "%" )? "All Organisations":$P{organization}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="72" width="90" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Campaign:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="92" y="72" width="210" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{campaign_name}.equals( "%" )? "All Campaigns":$P{campaign_name}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="495" y="0" width="60" height="60"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "communicate_c.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="45">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+			<textField>
+				<reportElement x="0" y="20" width="554" height="20">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page " + String.valueOf($V{PAGE_NUMBER}) + " of " + String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="nth_page_title" x="0" y="0" width="554" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Campaign Subscriber Report]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement style="column_header" mode="Opaque" x="0" y="0" width="105" height="40"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Organisation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column_header" mode="Opaque" x="105" y="0" width="205" height="40"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Campaign]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column_header" mode="Opaque" x="310" y="0" width="80" height="40"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Completed]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column_header" mode="Opaque" x="390" y="0" width="80" height="40"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Still receiving messages]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="column_header" mode="Opaque" x="470" y="0" width="80" height="40"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Credits required]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="105" height="20"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{organization_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="105" y="0" width="205" height="20"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{campaign_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="310" y="0" width="80" height="20"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$F{completed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="390" y="0" width="80" height="20"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$F{still_receiving_msgs}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="470" y="0" width="80" height="20"/>
+				<box leftPadding="5" rightPadding="5">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$F{credits_required}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="40" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="128" height="40"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "cell-life.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="322" y="0" width="114" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Report generated on:]]></text>
+			</staticText>
+			<textField pattern="EEE, d MMM yyyy HH:mm">
+				<reportElement x="436" y="0" width="119" height="20"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-5" x="399" y="20" width="80" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page " + String.valueOf($V{PAGE_NUMBER}) + " of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="480" y="20" width="75" height="20"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="15">
+			<staticText>
+				<reportElement style="column_header" mode="Opaque" x="0" y="0" width="310" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTALS]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true" pattern="###0">
+				<reportElement style="column_header" mode="Opaque" x="310" y="0" width="80" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$V{sum_completed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" pattern="###0">
+				<reportElement style="column_header" mode="Opaque" x="390" y="0" width="80" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$V{sum_stillreceivingmsgs}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" pattern="###0">
+				<reportElement style="column_header" mode="Opaque" x="470" y="0" width="80" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$V{sum_creditsrequired}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

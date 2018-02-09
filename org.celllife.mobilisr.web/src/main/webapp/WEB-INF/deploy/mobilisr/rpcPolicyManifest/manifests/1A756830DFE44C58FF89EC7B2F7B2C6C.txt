@@ -1,0 +1,2 @@
+serviceClass: org.celllife.mobilisr.service.gwt.ReportService
+path: 3752287BAEA747351B5994C35C09EB16.gwt.rpc

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<sec:global-method-security secured-annotations="enabled" access-decision-manager-ref="accessDecisionManager"/>
+	
+	<bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+	  <sec:filter-chain-map path-type="ant">
+	  
+	    <sec:filter-chain pattern="/images/**" filters="none" />
+		<sec:filter-chain pattern="/*.css" filters="none" />
+		<sec:filter-chain pattern="/login.*" filters="none" />
+		<sec:filter-chain pattern="/passwordrecovery.jsp" filters="none" />
+		<sec:filter-chain pattern="/favicon.ico" filters="none" />
+		 
+	    <sec:filter-chain pattern="/api/**" filters="
+	           securityContextPersistenceFilterWithASCFalse,
+	           apikeyAuthenticationFilter,
+	           basicAuthenticationFilter,
+	           basicExceptionTranslationFilter,
+	           filterSecurityInterceptor" />
+ 		<sec:filter-chain pattern="/**" filters="
+	           securityContextPersistenceFilterWithASCTrue,
+	           logoutFilter,
+	           formLoginFilter,
+	           anonFilter,
+	           sessionMgmtFilter,
+	           formExceptionTranslationFilter,
+	           filterSecurityInterceptor" />  
+	  </sec:filter-chain-map>
+	</bean>
+	
+	<!-- ********************************** web simple ***************************************************-->
+	<bean id="securityContextPersistenceFilterWithASCTrue" class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
+		<property name='securityContextRepository'>
+			<bean class='org.springframework.security.web.context.HttpSessionSecurityContextRepository'>
+			  <property name='allowSessionCreation' value='true' />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="securityContextRepository"
+	        class="org.springframework.security.web.context.HttpSessionSecurityContextRepository" />
+
+	<bean id="logoutFilter"
+		class="org.springframework.security.web.authentication.logout.LogoutFilter">
+		<constructor-arg value="/login.jsp" />
+		<constructor-arg>
+			<list>
+				<bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+			</list>
+		</constructor-arg>
+		<property name="filterProcessesUrl" value="/mobilisr/j_spring_security_logout"/>
+	</bean> 
+
+	<bean id="formLoginFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+		<property name="authenticationManager" ref="authenticationManager"/>
+		<property name="authenticationSuccessHandler">
+			<bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
+				<property name="defaultTargetUrl" value="/communicate.html"/>
+			</bean>
+		</property>
+		<property name="authenticationFailureHandler">
+		<bean id="loginFailHandler" class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler">
+			<property name="exceptionMappings">
+				<props>
+					<prop key="org.springframework.security.authentication.BadCredentialsException">/login.jsp?error=1</prop>
+					<prop key="org.springframework.security.core.userdetails.UsernameNotFoundException">/login.jsp?error=2</prop>
+					<prop key="org.springframework.security.web.authentication.session.SessionAuthenticationException">/login.jsp?error=3</prop>
+					<prop key="org.springframework.security.authentication.DisabledException">/login.jsp?error=5</prop>		
+				</props>
+			</property>
+		</bean>	
+		</property>
+		<property name="filterProcessesUrl" value="/j_spring_security_check"/>
+	</bean>
+	
+	<bean id="anonFilter" class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter" >
+	    <property name="key" value="ed93ab46f1c941258226e01ce5907324" />
+	    <property name="userAttribute" value="anonymousUser,ROLE_ANONYMOUS" />
+	</bean>
+
+	<bean id="sessionMgmtFilter" class="org.springframework.security.web.session.SessionManagementFilter" >
+	    <constructor-arg ref="securityContextRepository" />
+	    <property name="sessionAuthenticationStrategy" ref="sas"/>
+	</bean>
+
+	<bean id="sas"
+		class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+		<constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+		<property name="maximumSessions" value="1" />
+		<property name="exceptionIfMaximumExceeded" value="true" />
+	</bean>
+  
+   	<bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+
+	<bean id="formExceptionTranslationFilter"
+		class="org.springframework.security.web.access.ExceptionTranslationFilter">
+		<property name="authenticationEntryPoint">
+			<bean id="formAuthenticationEntryPoint"
+				class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+				<property name="loginFormUrl" value="/login.jsp" />
+				<property name="forceHttps" value="false" />
+			</bean>
+		</property>
+	</bean>		
+	
+	<bean class="org.springframework.security.authentication.dao.ReflectionSaltSource" id="saltSource">
+  		<property name="userPropertyToUse" value="username"/>
+	</bean>
+	
+	<!-- **********************************webservice******************************************* -->
+	<bean id="securityContextPersistenceFilterWithASCFalse" class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
+		<property name="securityContextRepository">
+			<bean class="org.springframework.security.web.context.HttpSessionSecurityContextRepository">
+			  <property name="allowSessionCreation" value="false" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="apikeyAuthenticationFilter"
+	  class="org.celllife.mobilisr.service.security.impl.ApiKeyAuthenticationFilter">
+	  <property name="authenticationManager" ref="authenticationManager"/>
+	  <property name="authenticationEntryPoint">
+	  	<bean class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>
+	  </property>
+	</bean>
+
+	<bean id="basicAuthenticationFilter"
+	  class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
+	  <property name="authenticationManager" ref="authenticationManager"/>
+	  <property name="authenticationEntryPoint" ref="basicAuthenticationEntryPoint"/>
+	</bean>
+	
+	<bean id="basicExceptionTranslationFilter"
+	     class="org.springframework.security.web.access.ExceptionTranslationFilter">
+	  <property name="authenticationEntryPoint" ref="basicAuthenticationEntryPoint"/>
+	  <property name="accessDeniedHandler" ref="basicAccessDeniedHandler"/>
+	</bean>
+	
+	<bean id="basicAuthenticationEntryPoint"
+	  class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
+	  <property name="realmName" value="communicate.cell-life.org"/>
+	</bean>
+	
+	<bean id="basicAccessDeniedHandler"
+		class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+	</bean>	
+	
+	<bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+	  <property name="authenticationManager" ref="authenticationManager"/>
+	  <property name="accessDecisionManager" ref="accessDecisionManager"/>
+	  <property name="securityMetadataSource">
+	    <sec:filter-security-metadata-source>
+		    <sec:intercept-url pattern="/mobilisr/recoverPassword" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+		    <sec:intercept-url pattern="/recoverPassword" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+		    <sec:intercept-url pattern="/api/**" access="IS_AUTHENTICATED_FULLY"/>
+			<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
+	    </sec:filter-security-metadata-source>
+	  </property>
+	</bean>
+	
+	<bean id="accessDecisionManager" class="org.celllife.mobilisr.service.security.impl.MobilisrAccessDecisionManager">
+	  <property name="decisionVoters">
+	    <list> 
+	   		<bean id="roleVoter" class="org.springframework.security.access.vote.RoleHierarchyVoter">
+	   			<constructor-arg ref="permissionHierarchy" />
+	        	<property name="rolePrefix" value="PERM_" />
+	        </bean>
+	    	<bean id="authenticatedVoter" class= "org.springframework.security.access.vote.AuthenticatedVoter"/>
+	    </list>
+	  </property>
+	</bean>
+	
+	<bean id="permissionHierarchy"
+        class="org.celllife.mobilisr.service.security.impl.MobilisrPermissionHeirachyImpl" />
+	
+	<!-- Authentication Manager used for authenticating user log in -->
+	<sec:authentication-manager alias="authenticationManager" >
+		<sec:authentication-provider user-service-ref="mobilisrSecurityService" >
+			<sec:password-encoder base64="true" hash="sha" ref="passwordEncoder">
+				<sec:salt-source user-property="salt"/>
+			</sec:password-encoder>
+		</sec:authentication-provider>
+		<sec:authentication-provider ref="apikeyAuthProvider">
+		</sec:authentication-provider>
+	</sec:authentication-manager>
+	
+	<bean id="ApplicationListener" class="org.celllife.mobilisr.service.security.AuthenticationListener" />
+
+	<bean id="apikeyAuthProvider" class="org.celllife.mobilisr.service.security.impl.ApiKeyAuthProvider">
+		 <property name="userDetailsService" ref="mobilisrSecurityService"/>
+	</bean>
+	
+</beans>
+

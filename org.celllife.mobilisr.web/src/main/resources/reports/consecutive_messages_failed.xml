@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<pconfig xmlns="http://www.cell-life.org/schemas/pconfig"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.cell-life.org/schemas/pconfig http://www.cell-life.org/schemas/pconfig/pconfig-1.0.xsd">
+	<id>consecutive_messages_failed</id>
+	<label>Consecutive message failures</label>
+	<resource>consecutive_messages_failed_report.jasper</resource>
+	<parameters>
+		<date name="startdate" label="Start date" allowFuture="false" optional="true"/>
+		<label value="If not set the start date will default to the beginning of the current month." />
+		<entity name="organization" entityClass="org.celllife.mobilisr.domain.Organization"
+			label="Organisation" displayProperty="name" searchFields="name"
+			valueProperty="name" defaultValue="%" optional="true" tooltip="Search for and organisation by name."/>
+		<integer name="cnt" label="Minimum number of consecutive failures" min="1" 
+			defaultValue="3"/>
+	</parameters>
+</pconfig>

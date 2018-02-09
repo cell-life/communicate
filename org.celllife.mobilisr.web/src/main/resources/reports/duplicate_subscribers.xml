@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<pconfig xmlns="http://www.cell-life.org/schemas/pconfig"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.cell-life.org/schemas/pconfig http://www.cell-life.org/schemas/pconfig/pconfig-1.0.xsd">
+	<id>duplicate_subscribers</id>
+	<label>Duplicate Subscribers</label>
+	<resource>duplicate_subscribers_report.jasper</resource>
+	<parameters>
+		<entity name="organization" entityClass="org.celllife.mobilisr.domain.Organization"
+			label="Organisation" displayProperty="name" searchFields="name"
+			valueProperty="name" defaultValue="%" optional="true" tooltip="Search for an organisation by name."/>
+		<text name="campaign_name" label="Campaign" defaultValue="%" optional="true"
+			 tooltip="Search for campaign groups using an expression like: %My Campaign%"/>
+		<label value="If not set the report will show data for all campaigns for the given organisation." />
+	</parameters>
+	<properties>
+        <map xmlns="" xmlns:ns2="http://www.cell-life.org/schemas/pconfig">
+            <permissions>REPORTS_VIEW_ADMIN_REPORTS</permissions>
+        </map>
+    </properties>
+</pconfig>

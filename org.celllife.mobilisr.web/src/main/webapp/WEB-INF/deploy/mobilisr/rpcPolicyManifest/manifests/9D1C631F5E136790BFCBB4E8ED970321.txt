@@ -1,0 +1,2 @@
+serviceClass: org.celllife.mobilisr.service.gwt.MessageFilterService
+path: F61EB46C51F2CA33BA101C930B01716E.gwt.rpc

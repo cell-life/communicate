@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<pconfig xmlns="http://www.cell-life.org/schemas/pconfig"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.cell-life.org/schemas/pconfig http://www.cell-life.org/schemas/pconfig/pconfig-1.0.xsd">
+	<id>credit_summary</id>
+	<label>Credit summary</label>
+	<resource>credit_summary_report.jasper</resource>
+	<parameters>
+		<date name="start_date" label="Start date" allowFuture="false" optional="true"/>
+		<label value="If not set the start date will default to the beginning of the current month." />
+		<date name="end_date" label="End date" allowFuture="false" optional="true"/>
+		<label value="If not set the end date will default to the end of the current month." />
+	</parameters>
+	<properties>
+        <map xmlns="" xmlns:ns2="http://www.cell-life.org/schemas/pconfig">
+            <permissions>REPORTS_VIEW_ADMIN_REPORTS</permissions>
+        </map>
+    </properties>
+</pconfig>
